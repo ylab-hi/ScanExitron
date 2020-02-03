@@ -42,6 +42,60 @@ grep -P "\tCDS\t" gencode.v21.annotation.gtf | gtf2bed  > gencode.hg38.CDS.bed
 grep -P "\tCDS\t" gencode.v19.annotation.gtf | gtf2bed  > gencode.hg19.CDS.bed
 ```
 
+### configure config.ini file
+```
+[fasta]
+
+# reference genome file in FASTA format
+
+hg38=/path/to/hg38.fa
+hg19=/path/to/hg19.fa
+
+[annotation]
+
+# gene annotation file in GTF format
+
+hg38=/path/to/gencode.v21.annotation.gtf
+hg19=/path/to/gencode.v19.annotation.gtf
+
+[cds]
+
+# CDS annotation in BED format 
+
+hg38=/path/to/gencode.hg38.CDS.bed
+hg19=/path/to/gencode.hg19.CDS.bed
+```
+
+Usage
+-------------------------
+#### Exitron calling using RNA-seq data
+```
+ScanExitron.py -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality
+```
+
+#### Options:
+
+```	
+-h, --help            show this help message and exit
+-i INPUT, --input INPUT
+                        RNA-seq alignment file (BAM/CRAM)
+--mapq                  Remove reads with MAPQ = 0			
+-r {hg19,hg38}, --ref {hg19,hg38}
+                        reference genome (default: hg38)
+```
+
+#### Input:
+```	
+input_bam_file      :input RNA-seq BAM/CRAM file. (e.g., rna-seq.bam)
+reference_genome    :specify reference genome (hg19 or hg38)
+```
+
+#### Output:
+```
+exitron_file			:Reported exitrons in a TAB-delimited file. (rna-seq.exitron)
+```
+
+
 License
 ----------------
 The project is licensed under the [MIT license](https://opensource.org/licenses/MIT).
