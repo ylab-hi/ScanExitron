@@ -15,3 +15,12 @@ conda install -c bioconda regtools
 conda install -c bioconda pyfaidx
 conda install -c bioconda pysam
 ```
+
+
+License
+----------------
+The project is licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+Contact
+-----------------
+Bug reports or feature requests can be submitted on the <a href="https://github.com/ylab-hi/ScanExitron/issues">ScanExitron Github page</a>.
