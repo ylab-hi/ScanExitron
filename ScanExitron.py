@@ -19,25 +19,23 @@ try:
     import configparser
 except ImportError:
     import ConfigParser as configparser
-    
-    
+
+
+
+def status_message(msg):
+    print(msg)
+    sys.stdout.flush()
+
 def get_value_by_key(src, delimiter='='):
     out_dict = {}
     src = src.strip().strip(';')
-    tmpList = re.split(r';\s{0,2}', src)■
+    tmpList = re.split(r';\s{0,2}', src) 
     for i in tmpList:
         if i:
             k = i.replace('"', '')
             m, n = k.split(delimiter)
             out_dict[m] = n
     return out_dict
-
-   
-
-def status_message(msg):
-    print(msg)
-    sys.stdout.flush()
-
 
 def config_getter():
     this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -96,10 +94,10 @@ def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter())
     output: out_name.janno
     '''
     if ref == 'hg19':
-        fasta == config['hg19_ref']
+        fasta = config['hg19_ref']
         gtf = config['hg19_anno']
     elif ref == 'hg38':
-        fasta == config['hg38_ref']
+        fasta = config['hg38_ref']
         gtf = config['hg38_anno']
 
     prefix = os.path.splitext(os.path.basename(bam_file))[0] 
@@ -276,10 +274,9 @@ def percent_spliced_out(bam_file, src_exitron_file, position_bed_file, mapq):
                 depth_dict['{}\t{}'.format(chrm, pos)] = int(depth)
     else:
         status_message(error_msg)
-    outfile = os.path.basename(src_exitron_file).split('.')[0] + '.exitron'
-    
+    outfile = os.path.splitext(os.path.basename(src_exitron_file))[0] + '.exitron'
     out = open(outfile, 'w')
-    
+    out.write('chrom\tstart\tend\tname\tao\tstrand\tgene_symbol\tsplice_site\tgene_id\tpso\tpsi\tdp\ttotal_junctions\n')
     with open(src_exitron_file) as f:
         for line in f:
             l = line.rstrip('\n').split('\t')
@@ -343,7 +340,7 @@ def seq_dict(ref='hg38', config=config_getter()):
 def parse_args():
     parser = argparse.ArgumentParser(description = "%(prog)s -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality", epilog="ScanExitron: detecting exitron splicing using RNA-Seq data")
     parser.add_argument('-i', '--input', action='store', dest='input', help="Input BAM/CRAM file along with BAI/CRAI file", required=True)
-    parser.add_argument('-m', '--mapq', action='store', dest='mapq', type=int, help="mapq (default: %(default)s)", default=0)
+    parser.add_argument('-m', '--mapq', action='store', dest='mapq', type=int, help="consider reads with MAPQ >= cutoff (default: %(default)s)", default=0)
     parser.add_argument('-r', '--ref', action='store', dest='ref', help="reference (default: %(default)s)", choices=['hg19', 'hg38'], default='hg38')
     parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.0')
     args = parser.parse_args()
