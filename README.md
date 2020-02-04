@@ -113,7 +113,9 @@ __Report Columns__
 |dp          | The average depth of the exitron   |
 |total_junctions | The total number of junctions in the sample |
 
-We also keep [RegTools](https://github.com/griffithlab/regtools) results (rna-seq.janno) for developers.
+
+We also keep [RegTools](https://github.com/griffithlab/regtools) interim results (rna-seq.janno) for developers.
+
 For a detailed explanation, please refer to [The Documentation of RegTools](https://regtools.readthedocs.org/en/latest/)
 
 License
