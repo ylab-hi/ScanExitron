@@ -95,6 +95,25 @@ reference_genome    :specify reference genome (hg19 or hg38)
 exitron_file			:Reported exitrons in a TAB-delimited file. (rna-seq.exitron)
 ```
 
+__Report Columns__
+
+|Column Name | Description |
+| ---------- | ----------- |
+|chrom       | The chromosome of this exitron|
+|start       | The start position of this exitron in the zero-based, half-open coordinate system |
+|end	       | The stop position of this exitron in the zero-based, half-open coordinate system |
+|name        | Identifier for the junction |
+|ao          | Observed supporting reads for exitron |
+|strand      | The strand the exitron is identified |
+|gene_symbol | The Gene symbol of the affected gene |
+|splice_site | The two basepairs at the donor and acceptor sites separated by a hyphen |
+|gene_id     | The Ensembl ID of the affected gene |
+|pso         | The percent spliced out (PSO) index  |
+|psi         | The percent spliced in (PSI) index |
+|dp          | The average depth of the exitron   |
+|total_junctions | The total number of junctions in the sample |
+
+
 
 License
 ----------------
