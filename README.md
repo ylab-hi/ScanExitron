@@ -79,7 +79,7 @@ ScanExitron.py -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality
 -h, --help            show this help message and exit
 -i INPUT, --input INPUT
                         RNA-seq alignment file (BAM/CRAM)
---mapq                  Remove reads with MAPQ = 0			
+--mapq                  consider reads with MAPQ >= cutoff (default: 0)		
 -r {hg19,hg38}, --ref {hg19,hg38}
                         reference genome (default: hg38)
 ```
