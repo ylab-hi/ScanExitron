@@ -19,8 +19,20 @@ try:
     import configparser
 except ImportError:
     import ConfigParser as configparser
+    
+    
+def get_value_by_key(src, delimiter='='):
+    out_dict = {}
+    src = src.strip().strip(';')
+    tmpList = re.split(r';\s{0,2}', src)■
+    for i in tmpList:
+        if i:
+            k = i.replace('"', '')
+            m, n = k.split(delimiter)
+            out_dict[m] = n
+    return out_dict
 
-
+   
 
 def status_message(msg):
     print(msg)
@@ -125,9 +137,9 @@ def junction_overlap_CDS_to_position_BED(janno, ref='hg38', config=config_getter
         intersect junctions with annotated CDS to search exitrons 
     '''
     if ref == 'hg19':
-        cds == config['hg19_cds']
+        cds = config['hg19_cds']
     elif ref == 'hg38':
-        cds == config['hg38_cds']
+        cds = config['hg38_cds']
 
     genome_seq = seq_dict(ref=ref)
 
@@ -265,7 +277,9 @@ def percent_spliced_out(bam_file, src_exitron_file, position_bed_file, mapq):
     else:
         status_message(error_msg)
     outfile = os.path.basename(src_exitron_file).split('.')[0] + '.exitron'
+    
     out = open(outfile, 'w')
+    
     with open(src_exitron_file) as f:
         for line in f:
             l = line.rstrip('\n').split('\t')
@@ -336,6 +350,7 @@ def parse_args():
     return args
 
 def main():
+    external_tool_checking()
     args = parse_args()
 
     janno_file = junction_caller(bam_file=args.input, ref=args.ref)
