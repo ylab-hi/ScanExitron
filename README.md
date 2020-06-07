@@ -106,6 +106,7 @@ __Report Columns__
 |ao          | Observed supporting reads for exitron |
 |strand      | The strand the exitron is identified |
 |gene_symbol | The Gene symbol of the affected gene |
+|length      | Length of the exitron |
 |splice_site | The two basepairs at the donor and acceptor sites separated by a hyphen |
 |gene_id     | The Ensembl ID of the affected gene |
 |pso         | The percent spliced out (PSO) index  |
