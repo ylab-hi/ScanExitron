@@ -40,7 +40,7 @@ def get_value_by_key(src, delimiter='='):
 def config_getter():
     this_dir = os.path.dirname(os.path.realpath(__file__))
     config_default = os.path.join(this_dir, 'config.ini')
-    config = configparser.SafeConfigParser(os.environ)
+    config = configparser.ConfigParser(os.environ)
     config.read(config_default)
     hg38_ref   = config.get("fasta", "hg38")
     hg19_ref   = config.get("fasta", "hg19")
