@@ -279,7 +279,7 @@ def percent_spliced_out(bam_file, src_exitron_file, position_bed_file, mapq):
         status_message(error_msg)
     outfile = os.path.splitext(os.path.basename(src_exitron_file))[0] + '.exitron'
     out = open(outfile, 'w')
-    out.write('chrom\tstart\tend\tname\tao\tstrand\tgene_symbol\tsplice_site\tgene_id\tpso\tpsi\tdp\ttotal_junctions\n')
+    out.write('chrom\tstart\tend\tname\tao\tstrand\tgene_symbol\tlength\tsplice_site\tgene_id\tpso\tpsi\tdp\ttotal_junctions\n')
     with open(src_exitron_file) as f:
         for line in f:
             l = line.rstrip('\n').split('\t')
