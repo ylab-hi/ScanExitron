@@ -357,7 +357,7 @@ def main():
     src_exitron_file, position_bed_file = junction_overlap_CDS_to_position_BED(janno_file, ref=args.ref)
 
     percent_spliced_out(bam_file=args.input, src_exitron_file=src_exitron_file, position_bed_file=position_bed_file, mapq=args.mapq)
-    remove(janno_file)
+    #remove(janno_file)
     
 
 if __name__ == '__main__':
