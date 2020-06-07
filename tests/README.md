@@ -3,7 +3,7 @@ Sample data for testing
 This directory contains one sample dataset for testing purpose to make sure you have installed ScanExitron and its dependencies sucessfully. __test.bam__ is a RNA-seq dataset (in BAM format) contains two exitrons. 
 
 ```
-ScanExitron.py -i test.bam  
+ScanExitron.py -i test.bam -r hg38
 ```
 
 Output file (test.exitron)
