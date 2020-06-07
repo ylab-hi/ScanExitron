@@ -306,9 +306,9 @@ def percent_spliced_out(bam_file, src_exitron_file, position_bed_file, mapq):
             except ZeroDivisionError:
                 print('Error in {} {} {}'.format(chrm, junc_start, junc_end))
                 pso = 0
-            psi = 1.0 - pso
+            psi = 1.0 - float('{:.4g}'.format(pso))
             dp = int(ao/pso)
-            out.write('{}\t{:.4g}\t{:.4g}\t{}\t{}\n'.format('\t'.join(l[:-1]), pso, psi, dp, l[-1]))
+            out.write('{}\t{:.4g}\t{}\t{}\t{}\n'.format('\t'.join(l[:-1]), pso, psi, dp, l[-1]))
     os.remove(src_exitron_file)
     os.remove(position_bed_file)
     out.close()
