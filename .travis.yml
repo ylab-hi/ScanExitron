@@ -1,12 +1,10 @@
 language: python
 python:
   - "3.6"
-  - "3.7"
 before_install:
   - python --version
   - pip install -U pip
   - pip install -U pytest
   - pip install pyfaidx
 script:
-    # Check the source code for obvious errors
-    - python3 --version
+  - python3 --version
