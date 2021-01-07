@@ -48,24 +48,24 @@ grep -P "\tCDS\t" gencode.v19.annotation.gtf | gtf2bed  > gencode.hg19.CDS.bed
 ```
 [fasta]
 
-# reference genome file in FASTA format
+# reference genome file in FASTA format (absolute path)
 
-hg38=/path/to/hg38.fa
-hg19=/path/to/hg19.fa
+hg38=/abs/path/to/hg38.fa
+hg19=/abs/path/to/hg19.fa
 
 [annotation]
 
-# gene annotation file in GTF format
+# gene annotation file in GTF format (absolute path)
 
-hg38=/path/to/gencode.v21.annotation.gtf
-hg19=/path/to/gencode.v19.annotation.gtf
+hg38=/abs/path/to/gencode.v21.annotation.gtf
+hg19=/abs/path/to/gencode.v19.annotation.gtf
 
 [cds]
 
-# CDS annotation in BED format 
+# CDS annotation in BED format (absolute path)
 
-hg38=/path/to/gencode.hg38.CDS.bed
-hg19=/path/to/gencode.hg19.CDS.bed
+hg38=/abs/path/to/gencode.hg38.CDS.bed
+hg19=/abs/path/to/gencode.hg19.CDS.bed
 ```
 
 Usage
