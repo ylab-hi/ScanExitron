@@ -29,10 +29,31 @@ def status_message(msg):
     print(msg)
     sys.stdout.flush()
 
+def run_cmd(cmd, msg=None):
+    status_message(cmd)
+    if ',' in msg:
+        begin, finish = msg.split(',')
+        status_message(begin)
+    else:
+        finish = msg
+    try:
+        result = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+    except subprocess.CalledProcessError as err:
+        error_msg = 'Error happend!: {}\n{}'.format(err, err.output)
+    else:
+        error_msg = ''
+    if not error_msg:
+        status_message(finish)
+        return True, result
+    else:
+        status_message(error_msg)
+        return False, None
+
+
 def get_value_by_key(src, delimiter='='):
     out_dict = {}
     src = src.strip().strip(';')
-    tmpList = re.split(r';\s{0,2}', src) 
+    tmpList = re.split(r';\s{0,2}', src)
     for i in tmpList:
         if i:
             k = i.replace('"', '')
@@ -103,35 +124,22 @@ def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter())
         fasta = config['hg38_ref']
         gtf = config['hg38_anno']
 
-    prefix = os.path.splitext(os.path.basename(bam_file))[0] 
-    cmd = 'regtools junctions extract -i 5 -I 10000000 {} -o {}.bed'.format(bam_file, prefix) 
-    try:
-        subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT,)
-    except subprocess.CalledProcessError as err:
-        error_msg = 'error! {}'.format(err)
-    else:
-        error_msg = ''
-    if not error_msg:
-        junction_flag = True
-        print('Calling junctions finished!')
+    prefix = os.path.splitext(os.path.basename(bam_file))[0]
+    cmd = 'regtools junctions extract -i 5 -I 10000000 {} -o {}.bed'.format(bam_file, prefix)
 
-    if junction_flag:
+    bed_flag, _ = run_cmd(cmd, 'Calling junctions start,Calling junctions finished!')
+    if bed_flag:
         bed = BED_handler('{}.bed'.format(prefix))
 
     if not out_name:
         out_name = prefix
     cmd = 'regtools junctions annotate {0} {1} {2} -o {3}.janno'.format(bed, fasta, gtf, out_name)
-    try:
-        subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT,)
-    except subprocess.CalledProcessError as err:
-        error_msg = 'error! {}'.format(err.output)
-    else:
-        error_msg = ''
-    if not error_msg:
-        print('{}.janno generated!'.format(out_name))
+
+    janno_flag, _ = run_cmd(cmd, '{}.janno generated!'.format(out_name))
+    if janno_flag:
         os.remove('{}'.format(bed))
         return '{}.janno'.format(out_name)
-
+    return False
 
 def junction_overlap_CDS_to_position_BED(janno, ref='hg38', config=config_getter()):
     '''
@@ -174,22 +182,16 @@ def junction_overlap_CDS_to_position_BED(janno, ref='hg38', config=config_getter
                     out.write('{}\n'.format('\t'.join(l[:7])))
     out.close()
 
-    overlap_file = '{}.overlap.bed'.format(os.getpid())             
+    overlap_file = '{}.overlap.bed'.format(os.getpid())
     cmd = 'bedtools intersect -s -wo -a {} -b {} > {}'.format(junction_bed, cds, overlap_file)
-    try:
-        subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT,)
-    except subprocess.CalledProcessError as err:
-        error_msg = 'error!'
-    else:
-        error_msg = ''
-    if not error_msg:
-        pass
+    run_cmd(cmd,'Junctions intersect with CDS,Junctions intersect with CDS finished!')
+
     # no overlap in CDS and junctions file
     if os.path.isfile(overlap_file) and os.path.getsize(overlap_file) == 0:
-        os.remove(overlap_file)            
-        os.remove(junction_bed)            
+        os.remove(overlap_file)
+        os.remove(junction_bed)
         print('No overlaps found in {} and gencode CDS'.format(janno))
-        return False 
+        return False
     # overlaps found in CDS and junctions file
     elif os.path.isfile(overlap_file) and os.path.getsize(overlap_file) > 0:
         tmp_dict =  OrderedDict()
@@ -258,25 +260,20 @@ def junction_overlap_CDS_to_position_BED(janno, ref='hg38', config=config_getter
 
 
 def percent_spliced_out(bam_file, src_exitron_file, position_bed_file, mapq):
-     
+
     print('Reading BAM file: {}'.format(bam_file))
     depth_dict = {}
     cmd = 'samtools bedcov {0} {1} -Q {2}'.format(position_bed_file, bam_file, mapq)
-    try:
-        result = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT,)
-    except subprocess.CalledProcessError as err:
-        error_msg = 'Error happend!: {}\n{}'.format(err, err.output)
-    else:
-        error_msg = ''
-    if not error_msg:
+    depth_flag, result = run_cmd(cmd, 'Calculate PSO and PSI.')
+
+    if depth_flag:
         result_file = BytesIO(result)
         result_string = result_file.getvalue().decode("utf-8")
         for line in result_string.split('\n'):
             if line:
                 chrm, _, pos, depth = line.rstrip().split()
                 depth_dict['{}\t{}'.format(chrm, pos)] = int(depth)
-    else:
-        status_message(error_msg)
+
     outfile = os.path.splitext(os.path.basename(src_exitron_file))[0] + '.exitron'
     out = open(outfile, 'w')
     out.write('chrom\tstart\tend\tname\tao\tstrand\tgene_symbol\tlength\tsplice_site\tgene_id\tpso\tpsi\tdp\ttotal_junctions\n')
@@ -339,13 +336,12 @@ def seq_dict(ref='hg38', config=config_getter()):
     return genome_dict
 
 
-
 def parse_args():
-    parser = argparse.ArgumentParser(description = "%(prog)s -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality", epilog="ScanExitron: detecting exitron splicing using RNA-Seq data")
+    parser = argparse.ArgumentParser(description = "%(prog)s -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality", epilog="ScanExitron: detecting exitron splicing events using RNA-Seq data")
     parser.add_argument('-i', '--input', action='store', dest='input', help="Input BAM/CRAM file along with BAI/CRAI file", required=True)
     parser.add_argument('-m', '--mapq', action='store', dest='mapq', type=int, help="consider reads with MAPQ >= cutoff (default: %(default)s)", default=0)
     parser.add_argument('-r', '--ref', action='store', dest='ref', help="reference (default: %(default)s)", choices=['hg19', 'hg38'], default='hg38')
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.0')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s {}'.format(__version__))
     args = parser.parse_args()
     return args
 
@@ -357,8 +353,8 @@ def main():
     src_exitron_file, position_bed_file = junction_overlap_CDS_to_position_BED(janno_file, ref=args.ref)
 
     percent_spliced_out(bam_file=args.input, src_exitron_file=src_exitron_file, position_bed_file=position_bed_file, mapq=args.mapq)
-    #remove(janno_file)
-    
+    remove(janno_file)
+
 
 if __name__ == '__main__':
     try:
