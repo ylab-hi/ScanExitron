@@ -13,6 +13,9 @@ We used __genCmds.py__ to generate commands to run ScanExitron
 
 
 ## Additional analysis
+Besides RNA-Seq data, some TCGA cohorts have corresponding Mass spectra data available at [CPTAC portal](https://cptac-data-portal.georgetown.edu/cptacPublic/).
+CPTAC proteomic data can use to confirm the expression of peptides derived from Exitron splicing.
+
 ### Exitron-derived polypeptides identification using OpenMS
 1. Create decoy sequences database.
 ```
