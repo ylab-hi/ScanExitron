@@ -35,5 +35,6 @@ IDMerger -in <pi_out.idXML files> -out <merged.idXML>
 FalseDiscoveryRate -in <merged.idXML> -out <fdr_out.idXML>
 IDFilter -in <fdr_out.idXML> -out <fdr_filtered.idXML> -score:pep 0.05
 ```
+We have packed the OpenMS commonds to a simple Python script [cptac.py](https://github.com/ylab-hi/ScanExitron/blob/master/Applications/cptac.py), and the corresponding OpenMS configure file [config.ini](https://github.com/ylab-hi/ScanExitron/blob/master/Applications/config/config.ini) is also available.
 
 
