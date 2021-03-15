@@ -1,4 +1,4 @@
-# ScanExitron's applications
+# Applications of ScanExitron
 
 We applied ScanExitron on RNA-Seq data of TCGA project.
 
