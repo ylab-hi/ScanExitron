@@ -48,7 +48,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--input', action='store', dest='spectra', help="spcetra folder including (*.mzML.gz)", required=True)
     parser.add_argument('-n', '--name', action='store', dest='name', help="sample name", required=True)
     parser.add_argument('-f', '--fasta', action='store', dest='fasta', help="Input fasta (decoy sequence included)", required=True)
-    parser.add_argument('-c', '--config', action='store', dest='config', help="output type (default: %(default)s)", default='./config/MSGF_iTRAQ.ini')
+    parser.add_argument('-c', '--config', action='store', dest='config', help="output type (default: %(default)s)", default='./config/config.ini')
     parser.add_argument('-m', '--msgfplus', action='store', dest='msgfplus', help='MSGF+ executable (default: %(default)s)', default='/home/tywang/software/anaconda2/share/msgf_plus-2017.07.21-2/MSGFPlus.jar')
     parser.add_argument('-t', '--tmp', action='store', dest='tmp',help='temp directory (default: %(default)s)', default='/tmp/')
     parser.add_argument('-o', '--output', action='store', dest='output', help="Output directory (default: %(default)s)", default='output')
