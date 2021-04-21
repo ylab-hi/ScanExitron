@@ -125,7 +125,7 @@ def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter())
         gtf = config['hg38_anno']
 
     prefix = os.path.splitext(os.path.basename(bam_file))[0]
-    cmd = 'regtools junctions extract -i 5 -I 10000000 {} -o {}.bed'.format(bam_file, prefix)
+    cmd = 'regtools junctions extract -m 5 -M 10000000 {} -o {}.bed'.format(bam_file, prefix)
 
     bed_flag, _ = run_cmd(cmd, 'Calling junctions start,Calling junctions finished!')
     if bed_flag:
