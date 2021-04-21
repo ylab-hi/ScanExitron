@@ -13,11 +13,11 @@ Install [anaconda](https://www.anaconda.com/download/) (python 3.6) firstly, the
 ```
 conda install -c bioconda samtools
 conda install -c bioconda bedtools
-conda install -c bioconda regtools
 conda install -c bioconda pyfaidx
 conda install -c bioconda pysam
 conda install -c bioconda bedops
 ```
+Install [RegTools v0.4.2] (https://github.com/griffithlab/regtools/releases/tag/0.4.2).
 
 ## Prepare the human genome FASTA sequences and annotation GTF file.
 
