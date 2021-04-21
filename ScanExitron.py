@@ -125,7 +125,8 @@ def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter())
         gtf = config['hg38_anno']
 
     prefix = os.path.splitext(os.path.basename(bam_file))[0]
-    cmd = 'regtools junctions extract -m 5 -M 10000000 {} -o {}.bed'.format(bam_file, prefix)
+    # Make ScanExitron.py compatible with RegTools v0.5.0 and above
+    cmd = f'regtools junctions extract -m 5 -M 10000000 {bam_file} -o {prefix}.bed'
 
     bed_flag, _ = run_cmd(cmd, 'Calling junctions start,Calling junctions finished!')
     if bed_flag:
