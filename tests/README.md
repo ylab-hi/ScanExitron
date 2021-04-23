@@ -1,12 +1,12 @@
 Testing environment
 ---
-* [Python](https://www.python.org) v3.7
-* [SamTools](http://www.htslib.org/) v1.10
-* [BedTools](https://bedtools.readthedocs.io/en/latest/) v2.26.0
-* [pyfaidx](https://github.com/mdshw5/pyfaidx) v0.5.9
-* [pysam](https://github.com/pysam-developers/pysam) v0.15.3
-* [bedops](https://bedops.readthedocs.io/en/latest/) v2.4.38
-* [RegTools](https://github.com/griffithlab/regtools) v0.4.2
+* [Python](https://www.python.org) (v3.7)
+* [SamTools](http://www.htslib.org/) (v1.10)
+* [BedTools](https://bedtools.readthedocs.io/en/latest/) (v2.26.0)
+* [pyfaidx](https://github.com/mdshw5/pyfaidx) (v0.5.9)
+* [pysam](https://github.com/pysam-developers/pysam) (v0.15.3)
+* [bedops](https://bedops.readthedocs.io/en/latest/) (v2.4.38)
+* [RegTools](https://github.com/griffithlab/regtools) (v0.4.2)
 
 
 Sample data for testing
