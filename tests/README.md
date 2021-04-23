@@ -1,3 +1,14 @@
+Testing environment
+---
+* python v3.7
+* samtools v1.10
+* bedtools v2.26.0
+* pyfaidx v0.5.9
+* pysam v0.15.3
+* bedops v2.4.38
+* regtools v0.4.2
+
+
 Sample data for testing
 ---
 This directory contains one sample dataset for testing purpose to make sure you have installed ScanExitron and its dependencies sucessfully. __test.bam__ is a RNA-seq dataset (in BAM format) contains two exitrons. 
