@@ -52,6 +52,8 @@ def run_cmd(cmd, msg=None):
 
 def get_value_by_key(src, delimiter='='):
     out_dict = {}
+    if not src.endswith(';'):
+        src = '; '.join(src.split('; ')[:-1])
     src = src.strip().strip(';')
     tmpList = re.split(r';\s{0,2}', src)
     for i in tmpList:
