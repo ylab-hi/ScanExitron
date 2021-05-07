@@ -17,7 +17,7 @@ conda install -c bioconda pyfaidx
 conda install -c bioconda pysam
 conda install -c bioconda bedops
 ```
-Install [RegTools v0.4.2](https://github.com/griffithlab/regtools/releases/tag/0.4.2). Currently, ScanExitron does not support _RegTools >= v0.5_.
+Install [RegTools v0.4.2](https://github.com/griffithlab/regtools/releases/tag/0.4.2). Currently, ScanExitron does not support __RegTools >= v0.5__.
 
 ## Prepare the human genome FASTA sequences and annotation GTF file.
 
