@@ -6,19 +6,14 @@ import sys
 import re
 import os
 import argparse
-import numpy as np
 import glob
 from pyfaidx import Fasta
 import subprocess
 import random
 import shutil
-import pysam
 from collections import OrderedDict
-from io import BytesIO ## for Python 3
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+from io import BytesIO
+import configparser
 
 
 def remove(infile):
