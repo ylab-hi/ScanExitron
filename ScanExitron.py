@@ -8,6 +8,7 @@ import os
 import argparse
 import glob
 from pyfaidx import Fasta
+import numpy as np
 import subprocess
 import random
 import shutil
