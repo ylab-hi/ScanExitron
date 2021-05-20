@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 #===============================================================================
-__version__ = 'v1.0beta'
+__version__ = 'v1.1beta'
 import sys
 import re
 import os
@@ -13,7 +13,7 @@ import subprocess
 import random
 import shutil
 from collections import OrderedDict
-from io import BytesIO
+from io import BytesIO ## for Python 3
 import configparser
 
 
@@ -123,8 +123,7 @@ def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter())
         gtf = config['hg38_anno']
 
     prefix = os.path.splitext(os.path.basename(bam_file))[0]
-    # Make ScanExitron.py compatible with RegTools v0.4.2
-    cmd = f'regtools junctions extract -i 5 -I 10000000 {bam_file} -o {prefix}.bed'
+    cmd = 'regtools junctions extract -i 5 -I 10000000 {} -o {}.bed'.format(bam_file, prefix)
 
     bed_flag, _ = run_cmd(cmd, 'Calling junctions start,Calling junctions finished!')
     if bed_flag:
@@ -325,6 +324,31 @@ def external_tool_checking():
             sys.exit(0)
         print("Checking for '" + each + "': found " + path)
 
+def done_file(name):
+    out = open(name+'.done', 'w')
+    out.write('done!')
+    out.close()
+
+def MAPQ_filter(in_bam, threads=6, mapq=50):
+    prefix = os.path.splitext(os.path.basename(in_bam))[0]
+    if os.path.exists(f'{prefix}.hq.bam.done'):
+        status_message(f'{prefix}.hq.bam found, skip MAPQ filtering!\n')
+        return '{}.hq.bam'.format(prefix)
+    cmd = 'samtools view -q {0} -@ {1} -O BAM -o {2}.hq.bam {3} && samtools index {2}.hq.bam'.format(mapq, threads, prefix, in_bam)
+    try:
+        subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT,)
+    except subprocess.CalledProcessError as err:
+        error_msg = 'error! {}'.format(err)
+    else:
+        error_msg = ''
+    if not error_msg:
+        Filter_flag = True
+        print('MAPQ filtering finished!')
+        done_file('{}.hq.bam'.format(prefix))
+        return '{}.hq.bam'.format(prefix)
+    else:
+        print(error_msg)
+        return False
 
 def seq_dict(ref='hg38', config=config_getter()):
     if ref =='hg19':
@@ -339,6 +363,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description = "%(prog)s -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality", epilog="ScanExitron: detecting exitron splicing events using RNA-Seq data")
     parser.add_argument('-i', '--input', action='store', dest='input', help="Input BAM/CRAM file along with BAI/CRAI file", required=True)
     parser.add_argument('-m', '--mapq', action='store', dest='mapq', type=int, help="consider reads with MAPQ >= cutoff (default: %(default)s)", default=0)
+    parser.add_argument('-t', '--threads', action='store', dest='threads', type=int, help="number of threads (default: %(default)s)", default=1)
     parser.add_argument('-r', '--ref', action='store', dest='ref', help="reference (default: %(default)s)", choices=['hg19', 'hg38'], default='hg38')
     parser.add_argument('-v', '--version', action='version', version='%(prog)s {}'.format(__version__))
     args = parser.parse_args()
@@ -348,11 +373,13 @@ def main():
     external_tool_checking()
     args = parse_args()
 
-    janno_file = junction_caller(bam_file=args.input, ref=args.ref)
-    src_exitron_file, position_bed_file = junction_overlap_CDS_to_position_BED(janno_file, ref=args.ref)
-
-    percent_spliced_out(bam_file=args.input, src_exitron_file=src_exitron_file, position_bed_file=position_bed_file, mapq=args.mapq)
-    remove(janno_file)
+    out_bam = MAPQ_filter(in_bam=args.input, threads=args.threads, mapq=args.mapq)
+    if out_bam:
+        janno_file = junction_caller(bam_file=out_bam, ref=args.ref)
+        src_exitron_file, position_bed_file = junction_overlap_CDS_to_position_BED(janno_file, ref=args.ref)
+        if src_exitron_file and position_bed_file:
+            percent_spliced_out(bam_file=args.input, src_exitron_file=src_exitron_file, position_bed_file=position_bed_file, mapq=args.mapq)
+            #remove(janno_file)
 
 
 if __name__ == '__main__':
