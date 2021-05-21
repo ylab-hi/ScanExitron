@@ -110,11 +110,14 @@ def BED_handler(inbed):
     shutil.move(tmp_file, inbed)
     return os.path.abspath(inbed)
 
-def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter()):
+def junction_caller(bam_file, ref='hg38', out_name=None, config=None):
     '''
     Call junctions using regtools
     output: out_name.janno
     '''
+    if not config:
+        sys.stderr.write("No config file was found!\n")
+        sys.exit(1)
     if ref == 'hg19':
         fasta = config['hg19_ref']
         gtf = config['hg19_anno']
@@ -123,11 +126,6 @@ def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter())
         gtf = config['hg38_anno']
 
     prefix = os.path.splitext(os.path.basename(bam_file))[0]
-    cmd = 'regtools junctions extract -i 5 -I 10000000 {} -o {}.bed'.format(bam_file, prefix)
-
-    bed_flag, _ = run_cmd(cmd, 'Calling junctions start,Calling junctions finished!')
-    if bed_flag:
-        bed = BED_handler('{}.bed'.format(prefix))
 
     if not out_name:
        out_name = prefix
@@ -135,6 +133,12 @@ def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter())
     if os.path.exists(f'{out_name}.janno.done'):
         status_message(f'{out_name}.janno found, skip junction identification.\n')
         return '{}.janno'.format(out_name)
+
+    cmd = 'regtools junctions extract -i 5 -I 10000000 {} -o {}.bed'.format(bam_file, prefix)
+
+    bed_flag, _ = run_cmd(cmd, 'Calling junctions start,Calling junctions finished!')
+    if bed_flag:
+        bed = BED_handler('{}.bed'.format(prefix))
 
     cmd = 'regtools junctions annotate {0} {1} {2} -o {3}.janno'.format(bed, fasta, gtf, out_name)
 
@@ -146,16 +150,20 @@ def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter())
         return '{}.janno'.format(out_name)
     return False
 
-def junction_overlap_CDS_to_position_BED(janno, ao_cutoff=3, ref='hg38', config=config_getter()):
+def junction_overlap_CDS_to_position_BED(janno, ao_cutoff=3, ref='hg38', config=None):
     '''
         intersect junctions with annotated CDS to search exitrons 
     '''
+    if not config:
+        sys.stderr.write("No config file was found!\n")
+        sys.exit(1)
+
     if ref == 'hg19':
         cds = config['hg19_cds']
     elif ref == 'hg38':
         cds = config['hg38_cds']
 
-    genome_seq = seq_dict(ref=ref)
+    genome_seq = seq_dict(ref=ref, config=config)
 
     print('Reading {}'.format(janno))
 
@@ -358,7 +366,12 @@ def MAPQ_filter(in_bam, threads=6, mapq=50):
         print(error_msg)
         return False
 
-def seq_dict(ref='hg38', config=config_getter()):
+def seq_dict(ref='hg38', config=None):
+
+    if not config:
+        sys.stderr.write("No config file was found!\n")
+        sys.exit(1)
+
     if ref =='hg19':
         fasta = config['hg19_ref']
     elif ref == 'hg38':
@@ -383,12 +396,12 @@ def parse_args():
 def main():
     external_tool_checking()
     args = parse_args()
-    config_getter(args.config)
+    config = config_getter(args.config)
 
     out_bam = MAPQ_filter(in_bam=args.input, threads=args.threads, mapq=args.mapq)
     if out_bam:
-        janno_file = junction_caller(bam_file=out_bam, ref=args.ref)
-        src_exitron_file, position_bed_file = junction_overlap_CDS_to_position_BED(janno_file, ao_cutoff=args.ao, ref=args.ref)
+        janno_file = junction_caller(bam_file=out_bam, ref=args.ref, config=config)
+        src_exitron_file, position_bed_file = junction_overlap_CDS_to_position_BED(janno_file, ao_cutoff=args.ao, ref=args.ref, config=config)
         if src_exitron_file and position_bed_file:
             percent_spliced_out(bam_file=args.input, src_exitron_file=src_exitron_file, position_bed_file=position_bed_file, ao_cutoff=args.ao, pso_cutoff=args.pso, mapq=args.mapq)
             #remove(janno_file)
