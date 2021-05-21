@@ -59,9 +59,9 @@ def get_value_by_key(src, delimiter='='):
             out_dict[m] = n
     return out_dict
 
-def config_getter():
+def config_getter(config_file='config.ini'):
     this_dir = os.path.dirname(os.path.realpath(__file__))
-    config_default = os.path.join(this_dir, 'config.ini')
+    config_default = os.path.join(this_dir, config_file)
     config = configparser.ConfigParser(os.environ)
     config.read(config_default)
     hg38_ref   = config.get("fasta", "hg38")
@@ -130,16 +130,23 @@ def junction_caller(bam_file, ref='hg38', out_name=None, config=config_getter())
         bed = BED_handler('{}.bed'.format(prefix))
 
     if not out_name:
-        out_name = prefix
+       out_name = prefix
+
+    if os.path.exists(f'{out_name}.janno.done'):
+        status_message(f'{out_name}.janno found, skip junction identification.\n')
+        return '{}.janno'.format(out_name)
+
     cmd = 'regtools junctions annotate {0} {1} {2} -o {3}.janno'.format(bed, fasta, gtf, out_name)
 
     janno_flag, _ = run_cmd(cmd, '{}.janno generated!'.format(out_name))
     if janno_flag:
+        status_message('{}.janno generated!'.format(out_name))
         os.remove('{}'.format(bed))
+        done_file(f'{out_name}.janno')
         return '{}.janno'.format(out_name)
     return False
 
-def junction_overlap_CDS_to_position_BED(janno, ref='hg38', config=config_getter()):
+def junction_overlap_CDS_to_position_BED(janno, ao_cutoff=3, ref='hg38', config=config_getter()):
     '''
         intersect junctions with annotated CDS to search exitrons 
     '''
@@ -211,7 +218,7 @@ def junction_overlap_CDS_to_position_BED(janno, ref='hg38', config=config_getter
                 gene_name = attr['gene_name']
                 gene_id = attr['gene_id']
                 pos_key = '{}:{}-{}'.format(chrm, junc_start, junc_end)
-                if length == junc_end - junc_start  and junc_start > ref_start and junc_end < ref_end and chrm in non_mito_chrms and int(junc_read_no)>=3:
+                if length == junc_end - junc_start  and junc_start > ref_start and junc_end < ref_end and chrm in non_mito_chrms and int(junc_read_no) >= ao_cutoff:
                     if not pos_key in tmp_dict:
                         info = '{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(chrm, junc_start, junc_end, junc_id, junc_read_no, strand, gene_name, length-1, splice_site, gene_id, total_junctions)
                         tmp_dict[pos_key] = info
@@ -257,7 +264,7 @@ def junction_overlap_CDS_to_position_BED(janno, ref='hg38', config=config_getter
     return src_exitron_file, position_bed_file
 
 
-def percent_spliced_out(bam_file, src_exitron_file, position_bed_file, mapq):
+def percent_spliced_out(bam_file, src_exitron_file, position_bed_file, ao_cutoff, pso_cutoff, mapq):
 
     print('Reading BAM file: {}'.format(bam_file))
     depth_dict = {}
@@ -303,7 +310,8 @@ def percent_spliced_out(bam_file, src_exitron_file, position_bed_file, mapq):
                 pso = 0
             psi = 1.0 - float('{:.4g}'.format(pso))
             dp = int(ao/pso)
-            out.write('{}\t{:.4g}\t{}\t{}\t{}\n'.format('\t'.join(l[:-1]), pso, psi, dp, l[-1]))
+            if ao >= ao_cutoff and pso >= pso_cutoff:
+                out.write('{}\t{:.4g}\t{}\t{}\t{}\n'.format('\t'.join(l[:-1]), pso, psi, dp, l[-1]))
     os.remove(src_exitron_file)
     os.remove(position_bed_file)
     out.close()
@@ -362,8 +370,11 @@ def seq_dict(ref='hg38', config=config_getter()):
 def parse_args():
     parser = argparse.ArgumentParser(description = "%(prog)s -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality", epilog="ScanExitron: detecting exitron splicing events using RNA-Seq data")
     parser.add_argument('-i', '--input', action='store', dest='input', help="Input BAM/CRAM file along with BAI/CRAI file", required=True)
+    parser.add_argument('-a', '--ao', action='store', dest='ao', type=int, help="AO cutoff (default: %(default)s)", default=3)
+    parser.add_argument('-p', '--pso', action='store', dest='pso', type=float, help="PSO cutoff (default: %(default)s)", default=0.05)
     parser.add_argument('-m', '--mapq', action='store', dest='mapq', type=int, help="consider reads with MAPQ >= cutoff (default: %(default)s)", default=0)
     parser.add_argument('-t', '--threads', action='store', dest='threads', type=int, help="number of threads (default: %(default)s)", default=1)
+    parser.add_argument('-c', '--config', action='store', dest='config', type=str, help="config file (default: %(default)s)", default='config.ini')
     parser.add_argument('-r', '--ref', action='store', dest='ref', help="reference (default: %(default)s)", choices=['hg19', 'hg38'], default='hg38')
     parser.add_argument('-v', '--version', action='version', version='%(prog)s {}'.format(__version__))
     args = parser.parse_args()
@@ -372,13 +383,14 @@ def parse_args():
 def main():
     external_tool_checking()
     args = parse_args()
+    config_getter(args.config)
 
     out_bam = MAPQ_filter(in_bam=args.input, threads=args.threads, mapq=args.mapq)
     if out_bam:
         janno_file = junction_caller(bam_file=out_bam, ref=args.ref)
-        src_exitron_file, position_bed_file = junction_overlap_CDS_to_position_BED(janno_file, ref=args.ref)
+        src_exitron_file, position_bed_file = junction_overlap_CDS_to_position_BED(janno_file, ao_cutoff=args.ao, ref=args.ref)
         if src_exitron_file and position_bed_file:
-            percent_spliced_out(bam_file=args.input, src_exitron_file=src_exitron_file, position_bed_file=position_bed_file, mapq=args.mapq)
+            percent_spliced_out(bam_file=args.input, src_exitron_file=src_exitron_file, position_bed_file=position_bed_file, ao_cutoff=args.ao, pso_cutoff=args.pso, mapq=args.mapq)
             #remove(janno_file)
 
 
