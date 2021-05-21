@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 #===============================================================================
-__version__ = 'v1.1beta'
+__version__ = 'v1.2beta'
 import sys
 import re
 import os
