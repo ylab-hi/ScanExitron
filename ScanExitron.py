@@ -351,19 +351,13 @@ def MAPQ_filter(in_bam, threads=6, mapq=50):
         status_message(f'{prefix}.hq.bam found, skip MAPQ filtering!\n')
         return '{}.hq.bam'.format(prefix)
     cmd = 'samtools view -q {0} -@ {1} -O BAM -o {2}.hq.bam {3} && samtools index {2}.hq.bam'.format(mapq, threads, prefix, in_bam)
-    try:
-        subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT,)
-    except subprocess.CalledProcessError as err:
-        error_msg = 'error! {}'.format(err)
-    else:
-        error_msg = ''
-    if not error_msg:
-        Filter_flag = True
-        print('MAPQ filtering finished!')
+
+    filter_flag, _ = run_cmd(cmd, 'BAM filtering begins, BAM filtering finished.')
+
+    if filter_flag:
         done_file('{}.hq.bam'.format(prefix))
         return '{}.hq.bam'.format(prefix)
     else:
-        print(error_msg)
         return False
 
 def seq_dict(ref='hg38', config=None):
@@ -384,7 +378,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description = "%(prog)s -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality", epilog="ScanExitron: detecting exitron splicing events using RNA-Seq data")
     parser.add_argument('-i', '--input', action='store', dest='input', help="Input BAM/CRAM file along with BAI/CRAI file", required=True)
     parser.add_argument('-a', '--ao', action='store', dest='ao', type=int, help="AO cutoff (default: %(default)s)", default=3)
-    parser.add_argument('-p', '--pso', action='store', dest='pso', type=float, help="PSO cutoff (default: %(default)s)", default=0.05)
+    parser.add_argument('-p', '--pso', action='store', dest='pso', type=float, help="PSO cutoff (default: %(default)s)", default=0.01)
     parser.add_argument('-m', '--mapq', action='store', dest='mapq', type=int, help="consider reads with MAPQ >= cutoff (default: %(default)s)", default=0)
     parser.add_argument('-t', '--threads', action='store', dest='threads', type=int, help="number of threads (default: %(default)s)", default=1)
     parser.add_argument('-c', '--config', action='store', dest='config', type=str, help="config file (default: %(default)s)", default='config.ini')
