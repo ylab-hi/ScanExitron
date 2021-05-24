@@ -81,7 +81,7 @@ ScanExitron.py -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality
 -i INPUT, --input INPUT
                         RNA-seq alignment file (BAM/CRAM)
 -a AO, --ao AO         AO cutoff (default: 3)
--p PSO, --pso PSO      PSO cutoff (default: 0.05)                        
+-p PSO, --pso PSO      PSO cutoff (default: 0.01)                        
 --mapq                  consider reads with MAPQ >= cutoff (default: 0)		
 -r {hg19,hg38}, --ref {hg19,hg38}
                         reference genome (default: hg38)
