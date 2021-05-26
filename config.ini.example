@@ -1,0 +1,14 @@
+[fasta]
+
+hg38=/home/usr/database/genome/hg38.fa
+hg19=/home/usr/database/genome/hg19.fa
+
+[annotation]
+
+hg38=/home/usr/database/gencode/gencode.v21.annotation.gtf
+hg19=/home/usr/database/gencode/gencode.v19.annotation.gtf
+
+[cds]
+
+hg38=/home/usr/database/gencode/gencode.hg38.CDS.bed
+hg19=/home/usr/database/gencode/gencode.hg19.CDS.bed
