@@ -1,15 +1,7 @@
-```python
-import os
-import glob
+We didn't provide __PRAD.info.with.HLA.txt__ used in gen_neoantigen.py here. Because it contains the HLA class I types for the PRAD cohort, which is a controlled dataset by NCI. You can follow the instructions in the __Data preparation__ section of [ScanExitron protocol](https://github.com/ylab-hi/ScanExitron/wiki/Exitron-and-exitron-derived-neoantigen-identification-with-ScanExitron-and-ScanNeo) to obtain it.
 
-hla = {}
-with open('PRAD.info.with.HLA.txt') as f:
-    f.readline()
-    for line in f:
-        l = line.rstrip().split('\t')
-        hla[l[0]] = l[-1]
+We only showed the first two lines of __PRAD.info.with.HLA.txt__ here.
 
-for i in glob.iglob('../VCFs/*.vep.vcf'):
-    name = os.path.basename(i).split('.')[0]
-    print(f'ScanNeo.py hla -t 16 -i {i} --alleles {hla[name]} --af PSO -e 9 -p /home/user/IEDB/ -o {name}.tsv')
-```
+| ALIQUOT_BARCODE | PATIENT_ID | FILE_ID | TUMOR_TYPE | HLA_TYPE|
+|-----------------|------------|---------|------------|---------|
+|TCGA-EJ-A65D-01A-11R-A30B-07  |TCGA-EJ-A65D|21ebc131-0bdc-4dcb-900f-6da23466ad6a|Primary Tumor|HLA-A*29:02,HLA-A*02:01,HLA-B*07:02,HLA-B*44:03,HLA-C*07:02,HLA-C*16:01|
