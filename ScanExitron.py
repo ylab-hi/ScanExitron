@@ -382,7 +382,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description = "%(prog)s -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality", epilog="ScanExitron: detecting exitron splicing events using RNA-Seq data")
     parser.add_argument('-i', '--input', action='store', dest='input', help="Input BAM/CRAM file along with BAI/CRAI file", required=True)
     parser.add_argument('-a', '--ao', action='store', dest='ao', type=int, help="AO cutoff (default: %(default)s)", default=3)
-    parser.add_argument('-p', '--pso', action='store', dest='pso', type=float, help="PSO cutoff (default: %(default)s)", default=0.01)
+    parser.add_argument('-p', '--pso', action='store', dest='pso', type=float, help="PSO cutoff (default: %(default)s)", default=0.05)
     parser.add_argument('-m', '--mapq', action='store', dest='mapq', type=int, help="consider reads with MAPQ >= cutoff (default: %(default)s)", default=0)
     parser.add_argument('-t', '--threads', action='store', dest='threads', type=int, help="number of threads (default: %(default)s)", default=1)
     parser.add_argument('-c', '--config', action='store', dest='config', type=str, help="config file (default: %(default)s)", default='config.ini')
