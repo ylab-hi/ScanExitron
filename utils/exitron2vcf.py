@@ -11,7 +11,7 @@ import configparser
 
 def config_getter():
     this_dir = os.path.dirname(os.path.realpath(__file__))
-    config_default = os.path.join(this_dir, 'config.ini')
+    config_default = os.path.join(os.path.dirname(this_dir), 'config.ini')
     config = configparser.ConfigParser(os.environ)
     config.read(config_default)
     hg38_ref   = config.get("fasta", "hg38")
