@@ -1,4 +1,5 @@
 import glob
+import os
 
 out = open('run_ScanNeo_anno.sh','w')
 for i in glob.iglob('*.vcf'):
