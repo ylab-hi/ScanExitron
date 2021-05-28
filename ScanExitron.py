@@ -287,7 +287,11 @@ def percent_spliced_out(bam_file, src_exitron_file, position_bed_file, ao_cutoff
                 chrm, _, pos, depth = line.rstrip().split()
                 depth_dict['{}\t{}'.format(chrm, pos)] = int(depth)
 
-    outfile = os.path.splitext(os.path.basename(src_exitron_file))[0] + '.exitron'
+    prefix = os.path.splitext(os.path.basename(src_exitron_file))[0]
+    if prefix.endswith('.hq'):
+        prefix = re.sub(r'\.hq$','', prefix)
+    outfile = prefix + '.exitron'
+    
     out = open(outfile, 'w')
     out.write('chrom\tstart\tend\tname\tao\tstrand\tgene_symbol\tlength\tsplice_site\tgene_id\tpso\tpsi\tdp\ttotal_junctions\n')
     with open(src_exitron_file) as f:
