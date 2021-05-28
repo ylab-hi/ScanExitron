@@ -6,7 +6,7 @@ import os
 import glob
 
 hla = {}
-with open('../../PRAD.info.with.HLA.txt') as f:
+with open('PRAD.info.with.HLA.txt') as f:
     f.readline()
     for line in f:
         l = line.rstrip().split('\t')
