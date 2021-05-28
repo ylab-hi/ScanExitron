@@ -1,10 +1,3 @@
-VCF files here
+You put all the exitrons identified in VCF format here.
 
-
-```python
-import glob
-
-for i in glob.iglob('*.vcf'):
-    name = os.path.basename(i).split('.')[0]
-    print(f'ScanNeo.py anno -i {i} -o {name}.vep.vcf')
-```    
+You can run [run_ScanNeo_anno.sh](https://github.com/ylab-hi/ScanExitron/blob/master/TCGA_data/TSEs/VCFs/run_ScanNeo_anno.sh) to generate [VEP](https://useast.ensembl.org/info/docs/tools/vep/index.html) annotated VCF files for [ScanNeo](https://github.com/ylab-hi/ScanNeo). 
