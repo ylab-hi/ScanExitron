@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 #===============================================================================
-__version__ = 'v1.2beta'
+__version__ = 'v1.3beta'
 import sys
 import re
 import os
@@ -44,20 +44,6 @@ def run_cmd(cmd, msg=None):
     else:
         status_message(error_msg)
         return False, None
-
-
-def get_value_by_key(src, delimiter='='):
-    out_dict = {}
-    if not src.endswith(';'):
-        src = '; '.join(src.split('; ')[:-1])
-    src = src.strip().strip(';')
-    tmpList = re.split(r';\s{0,2}', src)
-    for i in tmpList:
-        if i:
-            k = i.replace('"', '')
-            m, n = k.split(delimiter)
-            out_dict[m] = n
-    return out_dict
 
 def config_getter(config_file='config.ini'):
     this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -201,8 +187,8 @@ def junction_overlap_CDS_to_position_BED(janno, ao_cutoff=3, ref='hg38', config=
 
     # no overlap in CDS and junctions file
     if os.path.isfile(overlap_file) and os.path.getsize(overlap_file) == 0:
-        os.remove(overlap_file)
-        os.remove(junction_bed)
+        remove(overlap_file)
+        remove(junction_bed)
         print('No overlaps found in {} and gencode CDS'.format(janno))
         return False
     # overlaps found in CDS and junctions file
@@ -221,17 +207,15 @@ def junction_overlap_CDS_to_position_BED(janno, ao_cutoff=3, ref='hg38', config=
                 splice_site = l[6]
                 ref_start = int(l[8])
                 ref_end = int(l[9])
-                attr = get_value_by_key(l[16], delimiter=' ')
-                #exon_number = attr['exon_number']
-                gene_name = attr['gene_name']
-                gene_id = attr['gene_id']
+                gene_name = l[11]
+                gene_id = l[10]
                 pos_key = '{}:{}-{}'.format(chrm, junc_start, junc_end)
                 if length == junc_end - junc_start  and junc_start > ref_start and junc_end < ref_end and chrm in non_mito_chrms and int(junc_read_no) >= ao_cutoff:
                     if not pos_key in tmp_dict:
                         info = '{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(chrm, junc_start, junc_end, junc_id, junc_read_no, strand, gene_name, length-1, splice_site, gene_id, total_junctions)
                         tmp_dict[pos_key] = info
-        os.remove(overlap_file)
-        os.remove(junction_bed)
+        remove(overlap_file)
+        remove(junction_bed)
         # exitrons found
         if len(tmp_dict) > 0:
             #x_ = int(random.random()*10000)
