@@ -14,7 +14,6 @@ Install [anaconda](https://www.anaconda.com/download/) (python 3.7) firstly, the
 conda install -c bioconda samtools
 conda install -c bioconda bedtools
 conda install -c bioconda pyfaidx
-conda install -c bioconda bedops
 ```
 Install [RegTools v0.4.2](https://github.com/griffithlab/regtools/releases/tag/0.4.2). Currently, ScanExitron does not support __RegTools >= v0.5__.
 
@@ -38,9 +37,9 @@ ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.a
 gunzip gencode.v19.annotation.gtf.gz
 
 # hg38 CDS
-grep -P "\tCDS\t" gencode.v21.annotation.gtf | gtf2bed  > gencode.hg38.CDS.bed
+cat gencode.v21.annotation.gtf | awk 'OFS="\t" {if ($3=="CDS") {print $1,$4-1,$5,$10,$16,$7}}' | tr -d '";' > gencode.hg38.CDS.bed
 # hg19 CDS
-grep -P "\tCDS\t" gencode.v19.annotation.gtf | gtf2bed  > gencode.hg19.CDS.bed
+cat gencode.v19.annotation.gtf | awk 'OFS="\t" {if ($3=="CDS") {print $1,$4-1,$5,$10,$16,$7}}' | tr -d '";' > gencode.hg19.CDS.bed
 ```
 
 ### configure config.ini file
