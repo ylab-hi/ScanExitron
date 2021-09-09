@@ -29,17 +29,17 @@ wget https://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/hg19.fa.gz
 gunzip hg19.fa.gz
 
 # hg38 annotation
-wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_21/gencode.v21.annotation.gtf.gz
-gunzip gencode.v21.annotation.gtf.gz
+wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_37/gencode.v37.annotation.gtf.gz
+gunzip gencode.v37.annotation.gtf.gz
 
 # hg19 annotation
 ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz
 gunzip gencode.v19.annotation.gtf.gz
 
 # hg38 CDS
-cat gencode.v21.annotation.gtf | awk 'OFS="\t" {if ($3=="CDS") {print $1,$4-1,$5,$10,$16,$7}}' | tr -d '";' > gencode.hg38.CDS.bed
+cat gencode.v37.annotation.gtf | awk 'OFS="\t" {if ($3=="CDS") {print $1,$4-1,$5,$10,$16,$7}}' | tr -d '";' > gencode.hg38.CDS.bed
 # hg19 CDS
-cat gencode.v19.annotation.gtf | awk 'OFS="\t" {if ($3=="CDS") {print $1,$4-1,$5,$10,$16,$7}}' | tr -d '";' > gencode.hg19.CDS.bed
+cat gencode.v19.annotation.gtf | awk 'BEGIN{OFS="\t"} { if ($3=="CDS") {if ($13=="ccdsid"){print $1,$4-1,$5,$20,$22,$7} else{ print $1,$4-1,$5,$18,$20,$7}}}' | tr -d '";' > gencode.hg19.CDS.bed
 ```
 
 ### configure config.ini file
