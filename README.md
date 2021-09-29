@@ -129,9 +129,7 @@ Contact
 -----------------
 Bug reports or feature requests can be submitted on the <a href="https://github.com/ylab-hi/ScanExitron/issues">ScanExitron Github page</a>.
 
-****************************************
 Citation
 ------------------
-Please see and cite our paper at [Molecular Cell](https://www.sciencedirect.com/science/article/pii/S1097276521002239) and [STAR protocols](https://star-protocols.cell.com/protocols/977).
+Please see and cite our papers at [Molecular Cell](https://www.sciencedirect.com/science/article/pii/S1097276521002239) and [STAR protocols](https://star-protocols.cell.com/protocols/977).
 
-**************************************
