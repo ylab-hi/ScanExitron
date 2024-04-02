@@ -6,10 +6,10 @@ A computational workflow for exitron splicing identification
 
 Prerequisites
 ----------------
-You need Python 3.7 to run ScanExitron.
+You need Python 3.12 to run ScanExitron.
 
 ### install necessary python packages via anaconda
-Install [anaconda](https://www.anaconda.com/download/) (python 3.7) firstly, then install dependent packages via conda in bioconda channel.
+Install [anaconda](https://www.anaconda.com/download/) (python 3.12) firstly, then install dependent packages via conda in bioconda channel.
 ```
 conda install -c bioconda samtools
 conda install -c bioconda bedtools
