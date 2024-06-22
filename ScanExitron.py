@@ -593,7 +593,7 @@ def main():
     config = config_getter(args.config)
 
     out_bam = MAPQ_filter(in_bam=args.input, threads=args.threads, mapq=args.mapq)
-    tmp_dir = TemporaryDirectory(delete=False)
+    tmp_dir = TemporaryDirectory()
     tmp_dir_name = tmp_dir.name
 
     if out_bam:
