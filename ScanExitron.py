@@ -266,7 +266,6 @@ def junction_overlap_CDS_to_position_BED(
                 l[6] = "{}-{}".format(left_site, right_site)
                 if l[6] in {"GT-AG", "GC-AG", "AT-AC"}:
                     out.write("{}\n".format("\t".join(l[:7])))
-    out.close()
 
     overlap_file = f"{tmp_dir}/{rnd_id}.overlap.bed"
     cmd = "bedtools intersect -s -wo -a {} -b {} > {}".format(
@@ -279,7 +278,7 @@ def junction_overlap_CDS_to_position_BED(
         remove(overlap_file)
         remove(junction_bed)
         print("No overlaps found in {} and gencode CDS".format(janno))
-        return False
+        return None, None
     # overlaps found in CDS and junctions file
     elif os.path.isfile(overlap_file) and os.path.getsize(overlap_file) > 0:
         tmp_dict = OrderedDict()
@@ -388,12 +387,12 @@ def junction_overlap_CDS_to_position_BED(
             out.close()
         else:
             print("No exitron found in {}".format(janno))
-            return False
+            return None, None
     return src_exitron_file, position_bed_file
 
 
 def percent_spliced_out(
-    bam_file, src_exitron_file, position_bed_file, ao_cutoff, pso_cutoff, mapq
+    bam_file, src_exitron_file, position_bed_file, ao_cutoff, pso_cutoff, mapq, out
 ):
     print("Reading BAM file: {}".format(bam_file))
     depth_dict = {}
@@ -408,15 +407,6 @@ def percent_spliced_out(
                 chrm, _, pos, depth = line.rstrip().split()
                 depth_dict["{}\t{}".format(chrm, pos)] = int(depth)
 
-    prefix = os.path.splitext(os.path.basename(src_exitron_file))[0]
-    if prefix.endswith(".hq"):
-        prefix = re.sub(r"\.hq$", "", prefix)
-    outfile = prefix + ".exitron"
-
-    out = open(outfile, "w")
-    out.write(
-        "chrom\tstart\tend\tname\tao\tstrand\tgene_symbol\tlength\tsplice_site\tgene_id\tpso\tpsi\tdp\ttotal_junctions\n"
-    )
     with open(src_exitron_file) as f:
         for line in f:
             l = line.rstrip("\n").split("\t")
@@ -455,7 +445,6 @@ def percent_spliced_out(
     os.remove(position_bed_file)
     out.close()
     print("Finished reading BAM file: {}".format(bam_file))
-    return outfile
 
 
 def external_tool_checking():
@@ -593,8 +582,15 @@ def main():
     config = config_getter(args.config)
 
     out_bam = MAPQ_filter(in_bam=args.input, threads=args.threads, mapq=args.mapq)
-    tmp_dir = TemporaryDirectory(delete=False)
+    tmp_dir = TemporaryDirectory()
     tmp_dir_name = tmp_dir.name
+
+    prefix = os.path.splitext(os.path.basename(args.input))[0]
+    outfile = prefix + ".exitron"
+    outstream = open(outfile, "w")
+    outstream.write(
+        "chrom\tstart\tend\tname\tao\tstrand\tgene_symbol\tlength\tsplice_site\tgene_id\tpso\tpsi\tdp\ttotal_junctions\n"
+    )
 
     if out_bam:
         janno_file = junction_caller(
@@ -607,7 +603,8 @@ def main():
             tmp_dir=tmp_dir_name,
             config=config,
         )
-        if src_exitron_file and position_bed_file:
+
+        if src_exitron_file is not None and position_bed_file is not None:
             percent_spliced_out(
                 bam_file=args.input,
                 src_exitron_file=src_exitron_file,
@@ -615,9 +612,11 @@ def main():
                 ao_cutoff=args.ao,
                 pso_cutoff=args.pso,
                 mapq=args.mapq,
+                out=outstream
             )
             tmp_dir.cleanup()
             # remove(janno_file)
+    outstream.close()
 
 
 if __name__ == "__main__":
