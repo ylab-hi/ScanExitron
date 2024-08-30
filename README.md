@@ -14,8 +14,8 @@ Install [anaconda](https://www.anaconda.com/download/) (python 3.12) firstly, th
 conda install -c bioconda samtools
 conda install -c bioconda bedtools
 conda install -c bioconda pyfaidx
+conda install -c bioconda regtools=0.5.0
 ```
-Install [RegTools v0.4.2](https://github.com/griffithlab/regtools/releases/tag/0.4.2). Currently, ScanExitron does not support __RegTools >= v0.5__.
 
 ## Prepare the human genome FASTA sequences and annotation GTF file.
 
@@ -80,8 +80,10 @@ ScanExitron.py -i input_rna_seq_bam_file -r [hg38/hg19] -m mapping_quality
 -i INPUT, --input INPUT
                         RNA-seq alignment file (BAM/CRAM)
 -a AO, --ao AO         AO cutoff (default: 3)
--p PSO, --pso PSO      PSO cutoff (default: 0.05)                        
---mapq                  consider reads with MAPQ >= cutoff (default: 50)		
+-p PSO, --pso PSO      PSO cutoff (default: 0.05)
+-s STRAND, --strand STRAND   Strand specificity of RNA library preparation (0 = unstranded, 1 = first-
+                        strand/RF, 2, = second-strand/FR) (default: 1)
+--mapq                  consider reads with MAPQ >= cutoff (default: 50)
 -r {hg19,hg38}, --ref {hg19,hg38}
                         reference genome (default: hg38)
 ```

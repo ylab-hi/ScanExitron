@@ -3,7 +3,6 @@
 # ===============================================================================
 __version__ = "v1.3.1beta"
 import sys
-import re
 import os
 import argparse
 from pyfaidx import Fasta
@@ -175,7 +174,9 @@ def BED_handler(inbed, tmp_dir):
     return os.path.abspath(inbed)
 
 
-def junction_caller(bam_file, ref="hg38", out_name=None, config=None, tmp_dir=None):
+def junction_caller(
+    bam_file, ref="hg38", strand=1, out_name=None, config=None, tmp_dir=None
+):
     """
     Call junctions using regtools
     output: out_name.janno
@@ -199,7 +200,7 @@ def junction_caller(bam_file, ref="hg38", out_name=None, config=None, tmp_dir=No
         status_message(f"{out_name}.janno found, skip junction identification.\n")
         return "{}.janno".format(out_name)
 
-    cmd = f"regtools junctions extract -i 5 -I 10000000 {bam_file} -o {tmp_dir}/{prefix}.bed"
+    cmd = f"regtools junctions extract -s {strand} -i 5 -I 10000000 {bam_file} -o {tmp_dir}/{prefix}.bed"
 
     bed_flag, _ = run_cmd(cmd, "Calling junctions start,Calling junctions finished!")
     if bed_flag:
@@ -239,8 +240,7 @@ def junction_overlap_CDS_to_position_BED(
     rnd_id = secrets.token_hex(16)
     junction_bed = f"{tmp_dir}/{rnd_id}.junction.bed"
     total_junctions = 0
-    out = open(junction_bed, "w")
-    with open(janno) as f:
+    with open(janno, "r") as f, open(junction_bed, "w") as out:
         f.readline()
         for line in f:
             l = line.rstrip().split("\t")
@@ -250,27 +250,25 @@ def junction_overlap_CDS_to_position_BED(
             end = int(l[2])
             stats = l[10]
             strand = l[5]
-            spliced_site = l[6].upper()
-            # if stats == 'N' and strand != '?' and spliced_site in {'GT-AG','GC-AG','AT-AC'}:
             if stats == "N" and strand != "?":
                 if strand == "+":
-                    left_site = genome_seq[chrm][start: start + 2].seq
-                    right_site = genome_seq[chrm][end - 3: end - 1].seq
+                    left_site = genome_seq[chrm][start : start + 2].seq
+                    right_site = genome_seq[chrm][end - 3 : end - 1].seq
                 elif strand == "-":
                     left_site = genome_seq[chrm][
-                        end - 3: end - 1
+                        end - 3 : end - 1
                     ].reverse.complement.seq
                     right_site = genome_seq[chrm][
-                        start: start + 2
+                        start : start + 2
                     ].reverse.complement.seq
                 l[6] = "{}-{}".format(left_site, right_site)
-                if l[6] in {"GT-AG", "GC-AG", "AT-AC"}:
+                splice_site = l[6].upper()
+                if splice_site in {"GT-AG", "GC-AG", "AT-AC"}:
                     out.write("{}\n".format("\t".join(l[:7])))
 
     overlap_file = f"{tmp_dir}/{rnd_id}.overlap.bed"
-    cmd = "bedtools intersect -s -wo -a {} -b {} > {}".format(
-        junction_bed, cds, overlap_file
-    )
+    cmd = f"bedtools intersect -s -wo -a {junction_bed} -b {cds} > {overlap_file}"
+
     run_cmd(cmd, "Junctions intersect with CDS,Junctions intersect with CDS finished!")
 
     # no overlap in CDS and junctions file
@@ -369,15 +367,15 @@ def junction_overlap_CDS_to_position_BED(
                 # ao = int(junc_read_no)
                 middle_point = int(np.median([start, end]))
 
-                if not "{}\t{}".format(chrm, start) in position_set:
+                if "{}\t{}".format(chrm, start) not in position_set:
                     out.write("{}\t{}\t{}\n".format(chrm, start - 1, start))
                     position_set.add("{}\t{}".format(chrm, start))
 
-                if not "{}\t{}".format(chrm, end) in position_set:
+                if "{}\t{}".format(chrm, end) not in position_set:
                     out.write("{}\t{}\t{}\n".format(chrm, end - 1, end))
                     position_set.add("{}\t{}".format(chrm, end))
 
-                if not "{}\t{}".format(chrm, middle_point) in position_set:
+                if "{}\t{}".format(chrm, middle_point) not in position_set:
                     out.write(
                         "{}\t{}\t{}\n".format(chrm, middle_point - 1, middle_point)
                     )
@@ -543,6 +541,16 @@ def parse_args():
         default=50,
     )
     parser.add_argument(
+        "-s",
+        "--strand",
+        action="store",
+        dest="strand",
+        type=int,
+        help="Strand specificity of RNA library preparation (0 = unstranded, 1 = first-strand/RF, 2, = second-strand/FR) (default: %(default)s)",
+        default=1,
+    )
+
+    parser.add_argument(
         "-t",
         "--threads",
         action="store",
@@ -594,7 +602,11 @@ def main():
 
     if out_bam:
         janno_file = junction_caller(
-            bam_file=out_bam, ref=args.ref, config=config, tmp_dir=tmp_dir_name
+            bam_file=out_bam,
+            ref=args.ref,
+            strand=args.strand,
+            config=config,
+            tmp_dir=tmp_dir_name,
         )
         src_exitron_file, position_bed_file = junction_overlap_CDS_to_position_BED(
             janno_file,
@@ -612,7 +624,7 @@ def main():
                 ao_cutoff=args.ao,
                 pso_cutoff=args.pso,
                 mapq=args.mapq,
-                out=outstream
+                out=outstream,
             )
             tmp_dir.cleanup()
             # remove(janno_file)

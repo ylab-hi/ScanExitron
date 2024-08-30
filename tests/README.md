@@ -5,7 +5,7 @@ Testing environment
 * [BedTools](https://bedtools.readthedocs.io/en/latest/) (v2.26.0)
 * [pyfaidx](https://github.com/mdshw5/pyfaidx) (v0.5.9)
 * [bedops](https://bedops.readthedocs.io/en/latest/) (v2.4.38)
-* [RegTools](https://github.com/griffithlab/regtools) (v0.4.2)
+* [RegTools](https://github.com/griffithlab/regtools) (v0.5.0)
 
 
 Sample data for testing
@@ -13,7 +13,7 @@ Sample data for testing
 This directory contains one sample dataset for testing purpose to make sure you have installed ScanExitron and its dependencies sucessfully. __test.bam__ is a RNA-seq dataset (in BAM format) contains two exitrons. 
 
 ```
-ScanExitron.py -i test.bam -r hg38 -a 3 -p 0.01
+ScanExitron.py -i test.bam -r hg38 -a 3 -p 0.01 -s 0
 ```
 
 Output file (test.hq.exitron)
