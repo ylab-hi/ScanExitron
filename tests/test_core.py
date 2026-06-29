@@ -1,9 +1,4 @@
 """Unit tests for pure, dependency-free functions."""
-import shutil
-from pathlib import Path
-
-import pytest
-
 from scanexitron.constants import (
     CANONICAL_SPLICE_SITES,
     CHRMS,
