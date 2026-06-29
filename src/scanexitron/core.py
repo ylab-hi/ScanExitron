@@ -140,7 +140,7 @@ def junction_overlap_CDS_to_position_BED(
     fasta: Path,
     gtf: Path,
     ao_cutoff: int = 3,
-    tmp_dir: Optional[str] = None,
+    tmp_dir: str | Path,
 ) -> tuple[Optional[str], Optional[str]]:
     """Intersect junctions with CDS annotation to identify exitron candidates.
 
@@ -151,8 +151,9 @@ def junction_overlap_CDS_to_position_BED(
     genome_seq = seq_dict(fasta)
 
     logger.info("Reading %s", janno)
+    tmp_dir = Path(tmp_dir)
     rnd_id = secrets.token_hex(16)
-    junction_bed = Path(tmp_dir) / f"{rnd_id}.junction.bed"
+    junction_bed = tmp_dir / f"{rnd_id}.junction.bed"
     total_junctions = 0
 
     with open(janno) as f, open(junction_bed, "w") as out:
