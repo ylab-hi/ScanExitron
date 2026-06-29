@@ -26,6 +26,23 @@ app = typer.Typer(
 vcf_app = typer.Typer(help="Convert an exitron results table to VCF format")
 
 
+@app.callback(invoke_without_command=True)
+def _app_callback(
+    version: bool = typer.Option(False, "--version", help="Show version and exit"),
+) -> None:
+    if version:
+        typer.echo(__version__)
+        raise typer.Exit()
+
+
+@vcf_app.callback(invoke_without_command=True)
+def _vcf_app_callback(
+    version: bool = typer.Option(False, "--version", help="Show version and exit"),
+) -> None:
+    if version:
+        typer.echo(__version__)
+        raise typer.Exit()
+
 @app.command()
 def run(
     input: Path = typer.Argument(..., help="Input BAM/CRAM file (index must be present alongside it)"),
