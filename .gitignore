@@ -25,6 +25,7 @@ htmlcov/
 *.hq.bam.done
 *.src
 *.position.bed
+.DS_Store
 
 # editors
 profile/
