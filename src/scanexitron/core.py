@@ -262,12 +262,13 @@ def percent_spliced_out(
     cmd = f"samtools bedcov {position_bed_file} {bam_file} -Q {mapq}"
     depth_flag, result = run_cmd(cmd, "Calculate PSO and PSI.")
 
-    if depth_flag and result:
-        for line in BytesIO(result).getvalue().decode().splitlines():
-            if line:
-                chrm, _, pos, depth = line.rstrip().split()
-                depth_dict[f"{chrm}\t{pos}"] = int(depth)
+    if not depth_flag or result is None:
+        raise RuntimeError("samtools bedcov failed; cannot compute PSO/PSI")
 
+    for line in result.decode(errors="replace").splitlines():
+        if line:
+            chrm, _, pos, depth = line.rstrip().split()
+            depth_dict[f"{chrm}\t{pos}"] = int(depth)
     with open(src_exitron_file) as f:
         for line in f:
             l = line.rstrip("\n").split("\t")
