@@ -40,7 +40,7 @@ def extract_cds_bed(gtf_path: str | Path, force: bool = False) -> Path:
         import HTSeq  # noqa: PLC0415
     except ImportError as exc:  # pragma: no cover
         raise ImportError(
-            "HTSeq is required for GTF parsing. Install it with: uv add htseq"
+            "HTSeq is required for GTF parsing. Install it with: pip install htseq (or conda install -c bioconda htseq)"
         ) from exc
 
     gtf_path = Path(gtf_path)
