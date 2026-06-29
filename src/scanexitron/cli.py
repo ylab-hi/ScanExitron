@@ -29,7 +29,7 @@ vcf_app = typer.Typer(help="Convert an exitron results table to VCF format")
 @app.command()
 def run(
     input: Path = typer.Argument(..., help="Input BAM/CRAM file (index must be present alongside it)"),
-    fasta: Path = typer.Option(..., "--fasta", "-f", help="Reference FASTA file"),
+    ref: Path = typer.Option(..., "--ref", "-r", help="Reference FASTA file"),
     gtf: Path = typer.Option(..., "--gtf", "-g", help="Annotation GTF file"),
     ao: int = typer.Option(3, "--ao", "-a", help="Minimum reads supporting the exitron"),
     pso: float = typer.Option(0.05, "--pso", "-p", help="Minimum PSO value"),
@@ -63,7 +63,7 @@ def run(
         outstream.write(_HEADER)
         janno_file = junction_caller(
             bam_file=out_bam,
-            fasta=fasta,
+            fasta=ref,
             gtf=gtf,
             strand=strand,
             tmp_dir=tmp_dir,
@@ -71,7 +71,7 @@ def run(
         if janno_file:
             src_file, pos_bed = junction_overlap_CDS_to_position_BED(
                 janno_file,
-                fasta=fasta,
+                fasta=ref,
                 gtf=gtf,
                 ao_cutoff=ao,
                 tmp_dir=tmp_dir,
@@ -93,7 +93,7 @@ def run(
 @vcf_app.command()
 def convert(
     input: Path = typer.Argument(..., help="Input exitron results table (.exitron file)"),
-    fasta: Path = typer.Option(..., "--fasta", "-f", help="Reference FASTA file"),
+    ref: Path = typer.Option(..., "--ref", "-r", help="Reference FASTA file"),
     output: str = typer.Option("output.vcf", "--output", "-o", help="Output VCF file"),
 ) -> None:
     """Convert an exitron results table to VCF format."""
@@ -104,7 +104,7 @@ def convert(
     )
 
     from .vcf import exitron2vcf
-    exitron2vcf(in_file=input, out_vcf=output, fasta=fasta)
+    exitron2vcf(in_file=input, out_vcf=output, fasta=ref)
     logging.info("VCF written to %s", output)
 
 
