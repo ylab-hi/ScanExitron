@@ -1,19 +1,44 @@
-.mypy_cache/
-/.coverage
-/.coverage.*
-/.nox/
-/.python-version
-/.pytype/
-/dist/
-/debug/
-/dependency/
-/build/
-/dependency/
-/docs/_build/
-/src/*.egg-info/
-__pycache__/
+# build / distribution
+dist/
+build/
+*.egg-info/
+*.egg
+MANIFEST
 
-# editor
+# pytest / coverage
+.coverage
+.coverage.*
+.nox/
+.pytest_cache/
+htmlcov/
+
+# type checkers
+.mypy_cache/
+.pytype/
+.python-version
+
+# generated tool outputs
+*.janno
+*.janno.done
+*.hq.bam
+*.hq.bam.bai
+*.hq.bam.done
+*.src
+*.position.bed
+
+# editors
 profile/
 .idea/
 .run/
+*.swp
+*~
+
+# project-local
+.omc/
+.serena/
+TODO.md
+CLAUDE.md
+debug/
+dependency/
+docs/_build/
+__pycache__/
