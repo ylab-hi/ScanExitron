@@ -14,7 +14,7 @@ _VCF_HEADER = """\
 ##ALT=<ID=INS,Description="Insertion">
 ##FILTER=<ID=LowQual,Description="PE/SR support below 3 or mapping quality below 20.">
 ##INFO=<ID=DP,Number=2,Type=Integer,Description="Total depth of junction">
-##INFO=<ID=SpliecedSite,Number=2,Type=String,Description="Splieced site">
+##INFO=<ID=SpliecedSite,Number=2,Type=String,Description="Spliced site">
 ##INFO=<ID=STRAND,Number=1,Type=String,Description="Junction strand">
 ##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the structural variant">
 ##INFO=<ID=AO,Number=1,Type=Integer,Description="Reads support of the exitron">
