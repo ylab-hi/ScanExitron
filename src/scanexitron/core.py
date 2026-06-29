@@ -104,10 +104,11 @@ def junction_caller(
     gtf: Path,
     strand: int = 1,
     out_name: Optional[str] = None,
-    tmp_dir: Optional[str] = None,
+    tmp_dir: str | Path,
 ) -> Optional[str]:
     """Call splice junctions with regtools and annotate against the reference GTF."""
     bam_file = Path(bam_file)
+    tmp_dir = Path(tmp_dir)
     prefix = bam_file.stem
     if not out_name:
         out_name = prefix
@@ -116,8 +117,7 @@ def junction_caller(
         logger.info("%s.janno found, skipping junction identification.", out_name)
         return f"{out_name}.janno"
 
-    bed_path = Path(tmp_dir) / f"{prefix}.bed"
-    cmd = (
+    bed_path = tmp_dir / f"{prefix}.bed"
         f"regtools junctions extract -s {strand} -i 5 -I 10000000 "
         f"{bam_file} -o {bed_path}"
     )
