@@ -22,6 +22,7 @@ _HEADER = (
 app = typer.Typer(
     help="ScanExitron: detecting exitron splicing events from RNA-Seq data",
     epilog="Requires regtools, samtools, and bedtools on PATH.",
+    context_settings={"help_option_names": ["-h", "--help"]},
 )
 
 
