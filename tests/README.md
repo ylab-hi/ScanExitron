@@ -1,24 +1,23 @@
 Testing environment
 ---
-* [Python](https://www.python.org) (v3.7)
-* [SamTools](http://www.htslib.org/) (v1.10)
-* [BedTools](https://bedtools.readthedocs.io/en/latest/) (v2.26.0)
-* [pyfaidx](https://github.com/mdshw5/pyfaidx) (v0.5.9)
-* [bedops](https://bedops.readthedocs.io/en/latest/) (v2.4.38)
-* [RegTools](https://github.com/griffithlab/regtools) (v0.5.0)
+* [Python](https://www.python.org) (≥ v3.10, tested with v3.13.13)
+* [SamTools](http://www.htslib.org/) (≥ v1.10, tested with v1.21)
+* [BedTools](https://bedtools.readthedocs.io/en/latest/) (≥ v2.26.0, tested with v2.31.1)
+* [pyfaidx](https://github.com/mdshw5/pyfaidx) (≥ v0.7.0, tested with v0.9.0.4)
+* [RegTools](https://github.com/griffithlab/regtools) (v0.5.0, tested with v0.5.0)
 
 
 Sample data for testing
 ---
-This directory contains one sample dataset for testing purpose to make sure you have installed ScanExitron and its dependencies sucessfully. __test.bam__ is a RNA-seq dataset (in BAM format) contains two exitrons. 
+This directory contains one sample dataset for testing purpose to make sure you have installed ScanExitron and its dependencies successfully. __test.bam__ is an RNA-seq dataset (in BAM format) that contains two exitrons.
 
-```
-ScanExitron.py -i test.bam -r hg38 -a 3 -p 0.01 -s 0
+```bash
+scanexitron run -i test.bam -r hg38.fa -g gencode.gtf -a 3 -p 0.01 -s 0
 ```
 
-Output file (test.hq.exitron)
+Output file (test.exitron)
 ---
 |chrom|start|end|name|ao|strand|gene_symbol|length|splice_site|gene_id|pso|psi|dp|total_junctions|
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-|chr17|50071324|50071418|JUNC00000010|16|+|ITGA3|93|GT-AG|ENSG00000005884.15|0.02674|0.97326|598|104499|
-|chr17|58302312|58302408|JUNC00000893|3|-|BZRAP1|95|GT-AG|ENSG00000005379.13|0.03371|0.96629|89|104499|
+|chr17|50071324|50071418|JUNC00000010|16|+|ITGA3|93|GT-AG|ENSG00000005884.18|0.0267|0.9733|598|104499|
+|chr17|58302312|58302408|JUNC00000893|3|-|TSPOAP1|95|GT-AG|ENSG00000005379.17|0.0337|0.9663|89|104499|
