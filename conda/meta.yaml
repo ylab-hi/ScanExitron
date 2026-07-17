@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  # sha256: <fill in after first PyPI upload: python -m twine check dist/* and copy sha256>
+  sha256: 3c8f43ce3ab0bb7170c03d58ade9408e77f7ac744cffd54666ea977bb6b8ac85
 
 build:
   number: 0
