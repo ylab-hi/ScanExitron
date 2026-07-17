@@ -1,6 +1,6 @@
 Testing environment
 ---
-* [Python](https://www.python.org) (≥ v3.10, tested with v3.13.13)
+* [Python](https://www.python.org) (v3.10 to v3.12, tested with v3.10.14)
 * [SamTools](http://www.htslib.org/) (≥ v1.10, tested with v1.21)
 * [BedTools](https://bedtools.readthedocs.io/en/latest/) (≥ v2.26.0, tested with v2.31.1)
 * [pyfaidx](https://github.com/mdshw5/pyfaidx) (≥ v0.7.0, tested with v0.9.0.4)

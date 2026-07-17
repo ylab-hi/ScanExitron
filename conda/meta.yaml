@@ -20,12 +20,12 @@ build:
 
 requirements:
   host:
-    - python >=3.10
+    - python >=3.10,<3.13
     - pip
     - setuptools >=68
     - wheel
   run:
-    - python >=3.10
+    - python >=3.10,<3.13
     - pyfaidx >=0.7
     - numpy >=1.21
     # External bioinformatics tools (install from bioconda):
