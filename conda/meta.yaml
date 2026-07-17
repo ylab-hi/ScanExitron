@@ -15,7 +15,6 @@ build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - scanexitron = scanexitron.cli:main
-    - exitron2vcf = scanexitron.cli:vcf_main
 
 requirements:
   host:
@@ -40,7 +39,7 @@ test:
     - scanexitron.cli
   commands:
     - scanexitron --version
-    - exitron2vcf --version
+    - scanexitron convert --help
 
 about:
   home: https://github.com/ylab-hi/ScanExitron

@@ -23,29 +23,24 @@ app = typer.Typer(
     help="ScanExitron: detecting exitron splicing events from RNA-Seq data",
     epilog="Requires regtools, samtools, and bedtools on PATH.",
 )
-vcf_app = typer.Typer(help="Convert an exitron results table to VCF format")
 
 
 @app.callback(invoke_without_command=True)
 def _app_callback(
+    ctx: typer.Context,
     version: bool = typer.Option(False, "--version", help="Show version and exit"),
 ) -> None:
     if version:
         typer.echo(__version__)
         raise typer.Exit()
-
-
-@vcf_app.callback(invoke_without_command=True)
-def _vcf_app_callback(
-    version: bool = typer.Option(False, "--version", help="Show version and exit"),
-) -> None:
-    if version:
-        typer.echo(__version__)
+    if ctx.invoked_subcommand is None:
+        typer.echo(ctx.get_help())
         raise typer.Exit()
+
 
 @app.command()
 def run(
-    input: Path = typer.Argument(..., help="Input BAM/CRAM file (index must be present alongside it)"),
+    input: Path = typer.Option(..., "--input", "-i", help="Input BAM/CRAM file (index must be present alongside it)"),
     ref: Path = typer.Option(..., "--ref", "-r", help="Reference FASTA file"),
     gtf: Path = typer.Option(..., "--gtf", "-g", help="Annotation GTF file"),
     ao: int = typer.Option(3, "--ao", "-a", help="Minimum reads supporting the exitron"),
@@ -107,9 +102,9 @@ def run(
     logging.info("Results written to %s", outfile)
 
 
-@vcf_app.command()
+@app.command()
 def convert(
-    input: Path = typer.Argument(..., help="Input exitron results table (.exitron file)"),
+    input: Path = typer.Option(..., "--input", "-i", help="Input exitron results table (.exitron file)"),
     ref: Path = typer.Option(..., "--ref", "-r", help="Reference FASTA file"),
     output: str = typer.Option("output.vcf", "--output", "-o", help="Output VCF file"),
 ) -> None:
@@ -127,7 +122,3 @@ def convert(
 
 def main() -> None:
     app()
-
-
-def vcf_main() -> None:
-    vcf_app()

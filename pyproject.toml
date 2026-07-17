@@ -47,7 +47,6 @@ Repository = "https://github.com/ylab-hi/ScanExitron"
 
 [project.scripts]
 scanexitron = "scanexitron.cli:main"
-exitron2vcf = "scanexitron.cli:vcf_main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/scanexitron"]

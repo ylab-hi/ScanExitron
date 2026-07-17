@@ -82,13 +82,13 @@ gunzip gencode.v37.annotation.gtf.gz
 Run `scanexitron` by pointing it to your reference FASTA, transcript annotation GTF, and the input BAM/CRAM file (which must have a `.bai`/`.crai` index file alongside it):
 
 ```bash
-scanexitron -r hg38.fa -g gencode.v37.annotation.gtf input.bam
+scanexitron run -i input.bam -r hg38.fa -g gencode.v37.annotation.gtf
 ```
 
 #### Calling Options
 | Flag | Default | Description |
 | :--- | :---: | :--- |
-| **`INPUT`** | *Required* | Path to the input BAM/CRAM file. |
+| **`-i, --input`** | *Required* | Path to the input BAM/CRAM file. |
 | **`-r, --ref`** | *Required* | Path to the reference genome FASTA file. |
 | **`-g, --gtf`** | *Required* | Path to the annotation GTF file. |
 | **`-a, --ao`** | `3` | Minimum junction-spanning reads supporting the exitron. |
@@ -102,16 +102,16 @@ scanexitron -r hg38.fa -g gencode.v37.annotation.gtf input.bam
 ---
 
 ### 🔄 2. Convert to VCF
-Format your exitron tabular output into a standard VCF file using `exitron2vcf`:
+Format your exitron tabular output into a standard VCF file using `scanexitron convert`:
 
 ```bash
-exitron2vcf -r hg38.fa -o sample.vcf sample.exitron
+scanexitron convert -i sample.exitron -r hg38.fa -o sample.vcf
 ```
 
 #### VCF Converter Options
 | Flag | Default | Description |
 | :--- | :---: | :--- |
-| **`INPUT`** | *Required* | Path to the input tabular results (`.exitron` file). |
+| **`-i, --input`** | *Required* | Path to the input tabular results (`.exitron` file). |
 | **`-r, --ref`** | *Required* | Path to the reference genome FASTA file. |
 | **`-o, --output`** | `output.vcf` | Path for the output VCF file. |
 
