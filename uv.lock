@@ -515,7 +515,6 @@ wheels = [
 
 [[package]]
 name = "scanexitron"
-version = "1.4.0"
 source = { editable = "." }
 dependencies = [
     { name = "htseq" },
@@ -524,6 +523,14 @@ dependencies = [
     { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pyfaidx" },
     { name = "typer" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
 ]
 
 [package.dev-dependencies]
@@ -537,10 +544,15 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "htseq", specifier = ">=2.0" },
+    { name = "mypy", marker = "extra == 'dev'" },
     { name = "numpy", specifier = ">=1.21" },
     { name = "pyfaidx", specifier = ">=0.7" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=7" },
+    { name = "pytest-cov", marker = "extra == 'dev'" },
+    { name = "ruff", marker = "extra == 'dev'" },
     { name = "typer", specifier = ">=0.12" },
 ]
+provides-extras = ["dev"]
 
 [package.metadata.requires-dev]
 dev = [

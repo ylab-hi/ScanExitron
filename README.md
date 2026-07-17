@@ -166,7 +166,7 @@ If you use ScanExitron in your research, please cite our papers:
 
 ## 📄 License
 
-This project is licensed under the terms of the **[MIT License](file:///Users/twp7981/dev/ScanExitron/LICENSE)**.
+This project is licensed under the terms of the **[MIT License](https://github.com/ylab-hi/ScanExitron/blob/main/LICENSE)**.
 
 ---
 
