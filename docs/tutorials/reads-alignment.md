@@ -11,7 +11,7 @@ Learn how to perform read alignment and prepare BAM files for use with ScanExitr
 
     **Prerequisites**:
     - SAMtools installed
-    - Aligners installed (STAR or Minimap2)
+    - Aligners installed (STAR or HISAT2)
 
     **Time**: ~30 minutes to several hours, depending on dataset size.
 
@@ -63,23 +63,7 @@ This generates `sample_star_Aligned.sortedByCoord.out.bam`.
 
 ---
 
-## 3. Long-read RNA-seq Alignment (Minimap2)
-
-For third-generation long-read RNA-seq data (PacBio Iso-Seq or ONT Nanopore), **Minimap2** is the standard aligner.
-
-### Step 3.1: Run Alignment
-
-```bash
-# For PacBio Iso-Seq (high accuracy)
-minimap2 -ax splice -t 8 hg38.fa reads.fastq.gz | samtools sort -@ 4 -o sample_minimap2.bam -
-
-# For Oxford Nanopore (ONT) Direct RNA-seq
-minimap2 -ax splice -uf -k14 -t 8 hg38.fa reads.fastq.gz | samtools sort -@ 4 -o sample_minimap2.bam -
-```
-
----
-
-## 4. Sorting and Indexing
+## 3. Sorting and Indexing
 
 ScanExitron requires coordinate-sorted BAM files with an index (`.bai`) located alongside them.
 
