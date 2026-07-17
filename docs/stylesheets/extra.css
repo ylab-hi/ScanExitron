@@ -1,0 +1,904 @@
+/* ============================================
+   CSS Custom Properties - Design System
+   ============================================ */
+
+:root {
+    /* Blue palette */
+    --scanexitron-blue-50: #e3f2fd;
+    --scanexitron-blue-100: #bbdefb;
+    --scanexitron-blue-200: #90caf9;
+    --scanexitron-blue-300: #64b5f6;
+    --scanexitron-blue-400: #42a5f5;
+    --scanexitron-blue-500: #2196f3;
+    --scanexitron-blue-600: #1e88e5;
+    --scanexitron-blue-700: #1976d2;
+    --scanexitron-blue-800: #1565c0;
+    --scanexitron-blue-900: #0d47a1;
+
+    /* Gradients */
+    --scanexitron-gradient-primary: linear-gradient(135deg, #1565c0 0%, #2196f3 50%, #64b5f6 100%);
+    --scanexitron-gradient-accent: linear-gradient(135deg, #42a5f5 0%, #90caf9 100%);
+    --scanexitron-gradient-subtle: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(100, 181, 246, 0.05) 100%);
+
+    /* Shadows */
+    --scanexitron-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --scanexitron-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --scanexitron-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --scanexitron-shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.16);
+    --scanexitron-shadow-blue: 0 4px 16px rgba(33, 150, 243, 0.25);
+
+    /* Spacing */
+    --scanexitron-space-xs: 0.25rem;
+    --scanexitron-space-sm: 0.5rem;
+    --scanexitron-space-md: 1rem;
+    --scanexitron-space-lg: 1.5rem;
+    --scanexitron-space-xl: 2rem;
+    --scanexitron-space-2xl: 3rem;
+
+    /* Border radius */
+    --scanexitron-radius-sm: 0.375rem;
+    --scanexitron-radius-md: 0.5rem;
+    --scanexitron-radius-lg: 0.75rem;
+    --scanexitron-radius-xl: 1rem;
+
+    /* Transitions */
+    --scanexitron-transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --scanexitron-transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --scanexitron-transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode adjustments */
+[data-md-color-scheme="slate"] {
+    --scanexitron-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --scanexitron-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --scanexitron-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --scanexitron-shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.5);
+    --scanexitron-shadow-blue: 0 4px 16px rgba(100, 181, 246, 0.3);
+}
+
+/* ============================================
+   Global Enhancements
+   ============================================ */
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Header background - blue gradient matching ScanExitron theme */
+.md-header {
+    background: var(--scanexitron-gradient-primary) !important;
+    box-shadow: var(--scanexitron-shadow-md);
+}
+
+[data-md-color-scheme="slate"] .md-header {
+    background: var(--scanexitron-gradient-primary) !important;
+}
+
+/* Header title text color - white */
+.md-header__title,
+.md-header__topic {
+    color: #ffffff !important;
+}
+
+[data-md-color-scheme="slate"] .md-header__title,
+[data-md-color-scheme="slate"] .md-header__topic {
+    color: #ffffff !important;
+}
+
+/* Header buttons and icons - white for visibility on blue background */
+.md-header__button {
+    color: #ffffff !important;
+}
+
+.md-header__button:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.md-header__button.md-icon {
+    color: #ffffff !important;
+}
+
+.md-header__button.md-icon:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Content fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.md-content {
+    animation: fadeIn var(--scanexitron-transition-slow) ease-out;
+}
+
+/* ============================================
+   Typography - Beautiful Headers
+   ============================================ */
+
+/* Main heading with gradient text */
+.md-typeset h1 {
+    font-weight: 800;
+    font-size: 2.75em;
+    background: var(--scanexitron-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.6em;
+    margin-top: 0.5em;
+    position: relative;
+    padding-bottom: 0.4em;
+}
+
+/* Animated underline for h1 */
+.md-typeset h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 120px;
+    height: 5px;
+    background: var(--scanexitron-gradient-accent);
+    border-radius: var(--scanexitron-radius-sm);
+    animation: slideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+    to {
+        width: 120px;
+        opacity: 1;
+    }
+}
+
+/* Dark mode h1 */
+[data-md-color-scheme="slate"] .md-typeset h1 {
+    background: linear-gradient(135deg, #64b5f6 0%, #bbdefb 50%, #e3f2fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* H2 with elegant border accent */
+.md-typeset h2 {
+    position: relative;
+    padding-bottom: 0.5em;
+    padding-left: 0.8em;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    font-weight: 700;
+    font-size: 2em;
+    color: var(--scanexitron-blue-800);
+    border-left: 5px solid var(--scanexitron-blue-500);
+    transition: all var(--scanexitron-transition-base);
+}
+
+.md-typeset h2:hover {
+    border-left-color: var(--scanexitron-blue-700);
+    padding-left: 1em;
+}
+
+/* H3 with refined styling */
+.md-typeset h3 {
+    position: relative;
+    padding-bottom: 0.4em;
+    padding-left: 0.6em;
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+    font-weight: 600;
+    font-size: 1.5em;
+    color: var(--scanexitron-blue-700);
+    border-left: 4px solid var(--scanexitron-blue-400);
+    transition: all var(--scanexitron-transition-base);
+}
+
+.md-typeset h3:hover {
+    border-left-color: var(--scanexitron-blue-600);
+    padding-left: 0.8em;
+}
+
+/* Dark mode headers */
+[data-md-color-scheme="slate"] .md-typeset h2 {
+    color: var(--scanexitron-blue-200);
+    border-left-color: var(--scanexitron-blue-400);
+}
+
+[data-md-color-scheme="slate"] .md-typeset h2:hover {
+    border-left-color: var(--scanexitron-blue-300);
+}
+
+[data-md-color-scheme="slate"] .md-typeset h3 {
+    color: var(--scanexitron-blue-300);
+    border-left-color: var(--scanexitron-blue-500);
+}
+
+[data-md-color-scheme="slate"] .md-typeset h3:hover {
+    border-left-color: var(--scanexitron-blue-400);
+}
+
+/* Subtle underlines for h2 and h3 */
+.md-typeset h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    height: 3px;
+    background: var(--scanexitron-gradient-accent);
+    border-radius: var(--scanexitron-radius-sm);
+    animation: slideIn 0.6s ease-out;
+}
+
+.md-typeset h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: var(--scanexitron-gradient-accent);
+    border-radius: var(--scanexitron-radius-sm);
+    animation: slideIn 0.5s ease-out;
+}
+
+/* ============================================
+   Code Blocks - Modern & Clean
+   ============================================ */
+
+/* Code block container with modern shadow */
+.md-typeset .highlight {
+    margin: var(--scanexitron-space-lg) 0;
+    border-radius: var(--scanexitron-radius-lg);
+    box-shadow: var(--scanexitron-shadow-md);
+    overflow: hidden;
+    border: 1px solid rgba(33, 150, 243, 0.1);
+    transition: all var(--scanexitron-transition-base);
+    position: relative;
+}
+
+.md-typeset .highlight:hover {
+    box-shadow: var(--scanexitron-shadow-lg);
+    transform: translateY(-2px);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .highlight {
+    border-color: rgba(100, 181, 246, 0.2);
+    box-shadow: var(--scanexitron-shadow-md);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .highlight:hover {
+    box-shadow: var(--scanexitron-shadow-lg);
+}
+
+/* Code block pre styling */
+.md-typeset .highlight pre {
+    border-radius: var(--scanexitron-radius-lg);
+    padding: var(--scanexitron-space-lg) var(--scanexitron-space-xl);
+    margin: 0;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+/* Inline code - elegant pills */
+.md-typeset code {
+    padding: 0.2em 0.5em;
+    font-size: 0.88em;
+    border-radius: var(--scanexitron-radius-sm);
+    background: rgba(33, 150, 243, 0.08);
+    border: 1px solid rgba(33, 150, 243, 0.15);
+    transition: all var(--scanexitron-transition-fast);
+}
+
+.md-typeset code:hover {
+    background: rgba(33, 150, 243, 0.12);
+    border-color: rgba(33, 150, 243, 0.25);
+}
+
+[data-md-color-scheme="slate"] .md-typeset code {
+    background: rgba(100, 181, 246, 0.12);
+    border-color: rgba(100, 181, 246, 0.2);
+}
+
+[data-md-color-scheme="slate"] .md-typeset code:hover {
+    background: rgba(100, 181, 246, 0.18);
+    border-color: rgba(100, 181, 246, 0.3);
+}
+
+/* Remove padding from code inside pre */
+.md-typeset pre > code {
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+/* Copy button enhancement */
+.md-clipboard {
+    transition: all var(--scanexitron-transition-base);
+    border-radius: var(--scanexitron-radius-sm);
+}
+
+.md-clipboard:hover {
+    transform: scale(1.15);
+    background: rgba(33, 150, 243, 0.1);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.md-clipboard--copied {
+    animation: pulse 0.5s ease-in-out;
+}
+
+/* ============================================
+   Admonitions - Beautiful Callouts
+   ============================================ */
+
+.md-typeset .admonition {
+    border-radius: var(--scanexitron-radius-lg);
+    border-left: 5px solid;
+    box-shadow: var(--scanexitron-shadow-md);
+    padding: var(--scanexitron-space-lg);
+    margin: var(--scanexitron-space-lg) 0;
+    transition: all var(--scanexitron-transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.md-typeset .admonition::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    opacity: 0;
+    transition: opacity var(--scanexitron-transition-base);
+}
+
+.md-typeset .admonition:hover {
+    box-shadow: var(--scanexitron-shadow-lg);
+    transform: translateY(-3px);
+}
+
+.md-typeset .admonition:hover::before {
+    opacity: 0.3;
+}
+
+/* Specific admonition types */
+.md-typeset .admonition.note {
+    border-left-color: var(--scanexitron-blue-500);
+}
+
+.md-typeset .admonition.tip,
+.md-typeset .admonition.hint {
+    border-left-color: #00c853;
+}
+
+.md-typeset .admonition.warning,
+.md-typeset .admonition.caution {
+    border-left-color: #ff9800;
+}
+
+.md-typeset .admonition.danger,
+.md-typeset .admonition.error {
+    border-left-color: #f44336;
+}
+
+.md-typeset .admonition.info,
+.md-typeset .admonition.question {
+    border-left-color: #2196f3;
+}
+
+/* ============================================
+   Navigation - Sidebar Enhancement
+   ============================================ */
+
+/* Tutorial section highlighting */
+.md-nav__item--nested > .md-nav__link {
+    font-weight: 700;
+    font-size: 0.9em;
+    position: relative;
+    padding: 0.5rem 0.8rem;
+    margin: 0.25rem 0;
+    background: var(--scanexitron-gradient-subtle);
+    border-radius: var(--scanexitron-radius-md);
+    border-left: 4px solid var(--scanexitron-blue-500);
+    transition: all var(--scanexitron-transition-base);
+}
+
+.md-nav__item--nested > .md-nav__link:hover {
+    transform: translateX(4px);
+    box-shadow: var(--scanexitron-shadow-sm);
+    border-left-color: var(--scanexitron-blue-700);
+}
+
+[data-md-color-scheme="slate"] .md-nav__item--nested > .md-nav__link {
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.15), rgba(33, 150, 243, 0.08));
+    border-left-color: var(--scanexitron-blue-400);
+}
+
+[data-md-color-scheme="slate"] .md-nav__item--nested > .md-nav__link:hover {
+    border-left-color: var(--scanexitron-blue-300);
+}
+
+/* Navigation items */
+.md-nav__item .md-nav__link {
+    position: relative;
+    padding: 0.4rem 0.6rem;
+    margin: 0.2rem 0.4rem;
+    font-weight: 500;
+    font-size: 0.88em;
+    color: var(--scanexitron-blue-800);
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: var(--scanexitron-radius-sm);
+    border-left: 3px solid transparent;
+    transition: all var(--scanexitron-transition-base);
+}
+
+.md-nav__item .md-nav__link:hover {
+    background: rgba(33, 150, 243, 0.08);
+    border-left-color: var(--scanexitron-blue-400);
+    transform: translateX(4px);
+}
+
+[data-md-color-scheme="slate"] .md-nav__item .md-nav__link {
+    color: var(--scanexitron-blue-200);
+    background: rgba(30, 30, 30, 0.4);
+}
+
+[data-md-color-scheme="slate"] .md-nav__item .md-nav__link:hover {
+    background: rgba(100, 181, 246, 0.15);
+    border-left-color: var(--scanexitron-blue-500);
+}
+
+/* Active navigation item */
+.md-nav__item .md-nav__link--active {
+    font-weight: 700;
+    color: #ffffff;
+    background: var(--scanexitron-gradient-primary);
+    border-left: 4px solid var(--scanexitron-blue-900);
+    box-shadow: var(--scanexitron-shadow-blue);
+}
+
+[data-md-color-scheme="slate"] .md-nav__item .md-nav__link--active {
+    background: var(--scanexitron-gradient-accent);
+    border-left-color: var(--scanexitron-blue-700);
+}
+
+/* ============================================
+   Buttons - Modern & Interactive
+   ============================================ */
+
+.md-button {
+    border-radius: var(--scanexitron-radius-md);
+    box-shadow: var(--scanexitron-shadow-sm);
+    transition: all var(--scanexitron-transition-base);
+    font-weight: 600;
+    padding: 0.6em 1.5em;
+}
+
+.md-button:hover {
+    box-shadow: var(--scanexitron-shadow-md);
+    transform: translateY(-2px);
+}
+
+.md-button--primary {
+    background: var(--scanexitron-gradient-primary);
+    color: white;
+}
+
+.md-button--primary:hover {
+    box-shadow: var(--scanexitron-shadow-blue);
+}
+
+/* ============================================
+   Tables - Clean & Modern
+   ============================================ */
+
+.md-typeset table:not([class]) {
+    border-radius: var(--scanexitron-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--scanexitron-shadow-md);
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.md-typeset table:not([class]) thead {
+    background: var(--scanexitron-gradient-primary);
+    color: white;
+}
+
+.md-typeset table:not([class]) tbody tr {
+    transition: all var(--scanexitron-transition-fast);
+}
+
+.md-typeset table:not([class]) tbody tr:hover {
+    background: rgba(33, 150, 243, 0.05);
+    transform: scale(1.005);
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) tbody tr:hover {
+    background: rgba(100, 181, 246, 0.1);
+}
+
+/* ============================================
+   Cards & Feature Grids
+   ============================================ */
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--scanexitron-space-lg);
+    margin: var(--scanexitron-space-xl) 0;
+}
+
+.feature-item {
+    padding: var(--scanexitron-space-xl);
+    border-radius: var(--scanexitron-radius-lg);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(33, 150, 243, 0.1);
+    transition: all var(--scanexitron-transition-base);
+    box-shadow: var(--scanexitron-shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--scanexitron-gradient-primary);
+    transform: scaleX(0);
+    transition: transform var(--scanexitron-transition-base);
+}
+
+.feature-item:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--scanexitron-shadow-lg);
+    border-color: rgba(33, 150, 243, 0.3);
+}
+
+.feature-item:hover::before {
+    transform: scaleX(1);
+}
+
+[data-md-color-scheme="slate"] .feature-item {
+    background: rgba(30, 30, 30, 0.6);
+    border-color: rgba(100, 181, 246, 0.2);
+}
+
+[data-md-color-scheme="slate"] .feature-item:hover {
+    border-color: rgba(100, 181, 246, 0.4);
+}
+
+/* ============================================
+   Navigation Tabs - Elevated Design
+   ============================================ */
+
+.md-tabs {
+    box-shadow: var(--scanexitron-shadow-md);
+    background: var(--scanexitron-gradient-primary) !important;
+}
+
+[data-md-color-scheme="slate"] .md-tabs {
+    background: var(--scanexitron-gradient-primary) !important;
+}
+
+.md-tabs__item {
+    transition: all var(--scanexitron-transition-base);
+}
+
+.md-tabs__item:hover {
+    transform: translateY(-2px);
+}
+
+/* Navigation tab titles - white text */
+.md-tabs__link {
+    color: #ffffff !important;
+}
+
+[data-md-color-scheme="slate"] .md-tabs__link {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   Search - Modern Enhancement
+   ============================================ */
+
+.md-search__input {
+    border-radius: var(--scanexitron-radius-lg);
+    box-shadow: var(--scanexitron-shadow-sm);
+    transition: all var(--scanexitron-transition-base);
+}
+
+.md-search__form {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(33, 150, 243, 0.15);
+    border-radius: var(--scanexitron-radius-lg);
+    transition: all var(--scanexitron-transition-base);
+}
+
+.md-search__form:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--scanexitron-shadow-md);
+    border-color: rgba(33, 150, 243, 0.25);
+}
+
+.md-search__form:focus-within {
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+    border-color: var(--scanexitron-blue-500);
+}
+
+[data-md-color-scheme="slate"] .md-search__form {
+    background: rgba(30, 30, 30, 0.8);
+    border-color: rgba(100, 181, 246, 0.2);
+}
+
+[data-md-color-scheme="slate"] .md-search__form:hover {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: rgba(100, 181, 246, 0.3);
+}
+
+/* ============================================
+   Scrollbar - Custom Styling
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: var(--scanexitron-radius-sm);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scanexitron-gradient-primary);
+    border-radius: var(--scanexitron-radius-sm);
+    transition: background var(--scanexitron-transition-base);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scanexitron-gradient-accent);
+}
+
+[data-md-color-scheme="slate"] ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================
+   Back to Top Button
+   ============================================ */
+
+.md-top {
+    background: var(--scanexitron-gradient-primary);
+    box-shadow: var(--scanexitron-shadow-lg);
+    transition: all var(--scanexitron-transition-base);
+    border-radius: 50%;
+}
+
+.md-top:hover {
+    transform: translateY(-6px) scale(1.1);
+    box-shadow: var(--scanexitron-shadow-xl);
+}
+
+/* ============================================
+   Footer Enhancement
+   ============================================ */
+
+.md-footer-meta {
+    background: var(--scanexitron-gradient-subtle);
+    border-top: 2px solid rgba(33, 150, 243, 0.1);
+}
+
+[data-md-color-scheme="slate"] .md-footer-meta {
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.08), rgba(33, 150, 243, 0.05));
+    border-top-color: rgba(100, 181, 246, 0.2);
+}
+
+/* ============================================
+   Anchor Links
+   ============================================ */
+
+.md-typeset .headerlink {
+    opacity: 0;
+    transition: all var(--scanexitron-transition-base);
+    transform: translateX(-8px);
+    color: var(--scanexitron-blue-500);
+}
+
+.md-typeset :hover > .headerlink {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.md-typeset .headerlink:hover {
+    color: var(--scanexitron-blue-700);
+}
+
+/* ============================================
+   Keyboard Keys
+   ============================================ */
+
+.md-typeset kbd {
+    background: linear-gradient(180deg, #ffffff, #f5f5f5);
+    border: 1px solid #d0d0d0;
+    border-bottom-width: 3px;
+    border-radius: var(--scanexitron-radius-sm);
+    box-shadow: var(--scanexitron-shadow-sm);
+    padding: 0.15em 0.5em;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9em;
+}
+
+[data-md-color-scheme="slate"] .md-typeset kbd {
+    background: linear-gradient(180deg, #4a4a4a, #3a3a3a);
+    border-color: #606060;
+}
+
+/* ============================================
+   Progress Bar
+   ============================================ */
+
+.md-progress {
+    background: var(--scanexitron-gradient-primary);
+    box-shadow: 0 0 12px rgba(33, 150, 243, 0.5);
+}
+
+/* ============================================
+   Badges
+   ============================================ */
+
+.md-typeset .badge {
+    display: inline-block;
+    padding: 0.3em 0.8em;
+    font-size: 0.85em;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: var(--scanexitron-radius-lg);
+    background: var(--scanexitron-gradient-primary);
+    color: white;
+    box-shadow: var(--scanexitron-shadow-sm);
+    transition: all var(--scanexitron-transition-base);
+}
+
+.md-typeset .badge:hover {
+    box-shadow: var(--scanexitron-shadow-md);
+    transform: scale(1.05);
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+
+.hero {
+    background: var(--scanexitron-gradient-subtle);
+    border-radius: var(--scanexitron-radius-xl);
+    padding: var(--scanexitron-space-2xl) var(--scanexitron-space-xl) !important;
+    margin: var(--scanexitron-space-xl) 0;
+    border: 1px solid rgba(33, 150, 243, 0.1);
+    box-shadow: var(--scanexitron-shadow-md);
+    text-align: center;
+}
+
+[data-md-color-scheme="slate"] .hero {
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.12), rgba(33, 150, 243, 0.08));
+    border-color: rgba(100, 181, 246, 0.2);
+}
+
+/* ============================================
+   Icons & Emoji
+   ============================================ */
+
+.md-typeset .twemoji {
+    vertical-align: text-bottom;
+}
+
+/* ============================================
+   FIX: Edit/View Source Buttons
+   ============================================ */
+
+/* Force buttons to be interactive and above everything */
+.md-content__button {
+    pointer-events: auto !important;
+    z-index: 1000 !important;
+    position: relative !important;
+    cursor: pointer !important;
+    transition: all var(--scanexitron-transition-base);
+}
+
+/* Ensure button links are clickable */
+.md-content__button > a {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    z-index: 1001 !important;
+}
+
+/* Make SVG icons pass clicks through to parent link */
+.md-content__button svg,
+.md-content__button svg * {
+    pointer-events: none !important;
+}
+
+/* Ensure the button container doesn't block clicks */
+.md-content__inner {
+    isolation: auto !important;
+}
+
+/* Remove any overlays from animations that might block */
+.md-content::before,
+.md-content::after {
+    pointer-events: none !important;
+}
+
+/* Make buttons visible and interactive with nice hover effect */
+.md-content__button.md-icon {
+    opacity: 0.6;
+    transition: all var(--scanexitron-transition-base);
+}
+
+.md-content__button.md-icon:hover {
+    opacity: 1;
+    transform: scale(1.2);
+    color: var(--scanexitron-blue-500);
+}
+
+/* Specific targeting for edit and view buttons */
+a[href*="edit/main/docs/"],
+a[href*="/blob/main/docs/"] {
+    pointer-events: auto !important;
+    z-index: 1001 !important;
+}
+
+/* ============================================
+   Responsive Enhancements
+   ============================================ */
+
+@media screen and (max-width: 76.1875em) {
+    .md-typeset h1 {
+        font-size: 2.2em;
+    }
+
+    .md-typeset h2 {
+        font-size: 1.7em;
+    }
+
+    .md-typeset h3 {
+        font-size: 1.3em;
+    }
+}
+
+@media screen and (max-width: 44.9375em) {
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        padding: var(--scanexitron-space-xl) var(--scanexitron-space-lg) !important;
+    }
+}
+

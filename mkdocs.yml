@@ -1,0 +1,196 @@
+site_name: ScanExitron Documentation
+site_url: https://ylab-hi.github.io/ScanExitron/
+repo_url: https://github.com/ylab-hi/ScanExitron
+edit_uri: edit/main/docs/
+repo_name: ylab-hi/ScanExitron
+site_description: Documentation for the ScanExitron project
+site_author: Ting-You Wang
+copyright: Copyright &copy; 2026 Ting-You Wang
+use_directory_urls: true
+
+theme:
+  name: material
+  palette:
+    # Default mode
+    - media: "(prefers-color-scheme)"
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-auto
+        name: "Switch to light mode"
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+  font:
+    text: Roboto
+    code: Roboto Mono
+  language: en
+  features:
+    # Navigation
+    - navigation.tabs # Top-level sections as tabs
+    - navigation.tabs.sticky # Sticky navigation tabs
+    - navigation.sections # Expandable sections
+    - navigation.expand # Expand all sections by default
+    - navigation.path # Show breadcrumb path
+    - navigation.indexes # Allow index pages for sections
+    - navigation.instant # SPA-like instant loading
+    - navigation.instant.progress # Show progress bar for instant loading
+    - navigation.tracking # Update URL on scroll
+    - navigation.top # Back-to-top button
+    - navigation.footer # Footer with prev/next navigation
+    - toc.follow # TOC follows scroll
+    - toc.integrate # Integrate TOC into navigation
+
+    # Search
+    - search.highlight # Highlight search terms
+    - search.suggest # Search suggestions
+    - search.share # Share search results
+
+    # Content
+    - content.code.copy # Copy button on code blocks
+    - content.code.select # Select code blocks
+    - content.code.annotate # Code annotations
+    - content.tabs.link # Linked content tabs
+    - content.tooltips # Improved tooltips
+    - content.action.edit # Edit button on pages
+    - content.action.view # View source button
+  icon:
+    repo: fontawesome/brands/github
+  logo: logo.png
+  favicon: logo.png
+
+# Custom CSS and JavaScript
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - "https://unpkg.com/mermaid@10/dist/mermaid.min.js"
+
+# Social cards and metadata
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ylab-hi/ScanExitron
+      name: ScanExitron on GitHub
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/scanexitron/
+      name: ScanExitron on PyPI
+  generator: false # Remove "Made with Material for MkDocs"
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quick-start.md
+      - Troubleshooting: getting-started/troubleshooting.md
+  - Tutorials:
+      - Reads alignment: tutorials/reads-alignment.md
+      - Running ScanExitron: tutorials/running-scanexitron.md
+  - Reference:
+      - CLI Commands: reference/cli.md
+  - About:
+      - Citation: about/citation.md
+      - License: about/license.md
+
+# Plugins configuration
+plugins:
+  - search:
+      separator: '[\s\-\.]+'
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+        remove_comments: true
+      cache_safe: true
+  - git-revision-date-localized:
+      type: date
+      enable_creation_date: true
+      fallback_to_build_date: true
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_signature_annotations: true
+            separate_signature: true
+
+# Markdown extensions
+markdown_extensions:
+  # Syntax highlighting with advanced features
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      auto_title: false
+      linenums: false
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+
+  # Icons and emojis
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator:
+        !!python/name:material.extensions.emoji.to_svg # Admonitions with collapsible support
+
+  - admonition
+  - pymdownx.details
+
+  # Markdown enhancements
+  - attr_list
+  - md_in_html
+  - pymdownx.snippets:
+      check_paths: false
+  - pymdownx.tasklist:
+      custom_checkbox: true
+      clickable_checkbox: true
+  - pymdownx.keys
+  - footnotes
+  - tables
+  - def_list
+
+  # Advanced typography
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.smartsymbols
+
+  # Better formatting
+  - pymdownx.betterem:
+      smart_enable: all
+
+  # Table of contents
+  - toc:
+      permalink: true
+      permalink_title: Anchor link to this section
+      toc_depth: 3
+
+  # Abbreviations
+  - abbr
