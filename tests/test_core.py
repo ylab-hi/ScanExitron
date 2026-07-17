@@ -93,3 +93,32 @@ def test_version_string():
     parts = __version__.split(".")
     assert len(parts) == 3
     assert all(p.isdigit() for p in parts)
+
+
+# ---------------------------------------------------------------------------
+# MAPQ_filter
+# ---------------------------------------------------------------------------
+
+def test_mapq_filter(tmp_path, test_bam, monkeypatch):
+    import shutil
+    from scanexitron.core import MAPQ_filter
+    from pathlib import Path
+
+    # Copy the test bam and its index to a temporary path
+    local_bam = tmp_path / "temp_test.bam"
+    local_bai = tmp_path / "temp_test.bam.bai"
+    shutil.copy(test_bam, local_bam)
+    shutil.copy(test_bam.with_suffix(".bam.bai"), local_bai)
+
+    # Change working directory to tmp_path to keep repo root clean
+    monkeypatch.chdir(tmp_path)
+
+    # Run MAPQ_filter
+    hq_bam = MAPQ_filter(local_bam, threads=1, mapq=50)
+
+    # Verify return value and created files
+    assert hq_bam == "temp_test.hq.bam"
+    assert Path("temp_test.hq.bam").exists()
+    assert Path("temp_test.hq.bam.done").exists()
+    assert Path("temp_test.hq.bam.bai").exists()
+
