@@ -102,9 +102,9 @@ def junction_caller(
     bam_file: str | Path,
     fasta: Path,
     gtf: Path,
+    tmp_dir: str | Path,
     strand: int = 1,
     out_name: Optional[str] = None,
-    tmp_dir: str | Path,
 ) -> Optional[str]:
     """Call splice junctions with regtools and annotate against the reference GTF."""
     bam_file = Path(bam_file)
@@ -118,6 +118,7 @@ def junction_caller(
         return f"{out_name}.janno"
 
     bed_path = tmp_dir / f"{prefix}.bed"
+    cmd = (
         f"regtools junctions extract -s {strand} -i 5 -I 10000000 "
         f"{bam_file} -o {bed_path}"
     )
@@ -139,8 +140,8 @@ def junction_overlap_CDS_to_position_BED(
     janno: str,
     fasta: Path,
     gtf: Path,
-    ao_cutoff: int = 3,
     tmp_dir: str | Path,
+    ao_cutoff: int = 3,
 ) -> tuple[Optional[str], Optional[str]]:
     """Intersect junctions with CDS annotation to identify exitron candidates.
 
