@@ -58,7 +58,10 @@ jobs:
             samtools
             bedtools
             regtools=0.5.0
-          channels: bioconda,conda-forge
+          condarc: |
+            channels:
+              - bioconda
+              - conda-forge
           cache-environment: true
 
       - name: Install dependencies
